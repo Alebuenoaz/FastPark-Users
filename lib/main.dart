@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -14,14 +15,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: Home.id,
+      routes: {
+        MyHomePage.id: (context) => MyHomePage(),
+        Home.id: (context) => Home(),
+        Register.id: (context) => Register(),
+        Login.id: (context) => Login(),
+        MainPage.id: (context) => MainPage(),
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
+  static const String id = "HOMESCREEN";
   final String title;
 
   @override
@@ -34,36 +43,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _createRecord() async {
     _counter++;
-    await databaseReference.collection("parqueos")
-      .document("1")
-      .setData({
-        'title': 'Chupate esa Drope',
-        'description': 'Parece que funciona Firebase'
-      });
+    await databaseReference.collection("parqueos").document("1").setData({
+      'title': 'Chupate esa Drope',
+      'description': 'Parece que funciona Firebase'
+    });
 
-    DocumentReference ref = await databaseReference.collection("parqueos")
-      .add({
-        'title': 'parqueo'+ _counter.toString(),
-        'description': 'Descripcion del parqueo nro '+ _counter.toString()
-      });
+    DocumentReference ref = await databaseReference.collection("parqueos").add({
+      'title': 'parqueo' + _counter.toString(),
+      'description': 'Descripcion del parqueo nro ' + _counter.toString()
+    });
     print(ref.documentID);
   }
 
   void _getData() {
-  databaseReference
-      .collection("parqueos")
-      .getDocuments()
-      .then((QuerySnapshot snapshot) {
-    snapshot.documents.forEach((f) => print('${f.data}}'));
+    databaseReference
+        .collection("parqueos")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
     });
   }
 
   void _updateData() {
     try {
       databaseReference
-        .collection('parqueos')
-        .document('1')
-        .updateData({'description': 'Seguila chupando Drope'});
+          .collection('parqueos')
+          .document('1')
+          .updateData({'description': 'Seguila chupando Drope'});
     } catch (e) {
       print(e.toString());
     }
@@ -71,10 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _deleteData() {
     try {
-      databaseReference
-        .collection('parqueos')
-        .document('1')
-        .delete();
+      databaseReference.collection('parqueos').document('1').delete();
     } catch (e) {
       print(e.toString());
     }
@@ -108,6 +111,214 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       )), //center
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  static const String id = "HOME";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          RaisedButton(
+            child: Text('Log In'),
+            onPressed: () {
+              Navigator.of(context).pushNamed(Login.id);
+            },
+          ),
+          RaisedButton(
+            child: Text('Register'),
+            onPressed: () {
+              Navigator.of(context).pushNamed(Register.id);
+            },
+          ),
+          RaisedButton(
+            child: Text('Nobo'),
+            onPressed: () {
+              Navigator.of(context).pushNamed(MyHomePage.id);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Register extends StatefulWidget {
+  static const String id = "REGISTRATION";
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  String email;
+  String password;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> registerUser() async {
+    AuthResult user = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    print("Usuario registrado " + user.user.email);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainPage(
+          user: user,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Register"),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          TextField(
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (value) => email = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Email...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
+          TextField(
+            autocorrect: false,
+            obscureText: true,
+            onChanged: (value) => password = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Password...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          RaisedButton(
+            child: Text('Register'),
+            onPressed: () async {
+              await registerUser();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Login extends StatefulWidget {
+  static const String id = "LOGIN";
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  String email;
+  String password;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> loginUser() async {
+    AuthResult user = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    print("Usuario " + user.user.email);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainPage(
+          user: user,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Login"),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          TextField(
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (value) => email = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Email...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
+          TextField(
+            autocorrect: false,
+            obscureText: true,
+            onChanged: (value) => password = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Password...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          RaisedButton(
+            child: Text('Log In'),
+            onPressed: () async {
+              await loginUser();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  static const String id = "MAIN";
+  final AuthResult user;
+
+  const MainPage({Key key, this.user}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.user.user.email),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[],
+      ),
     );
   }
 }
