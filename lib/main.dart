@@ -161,25 +161,38 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   String email;
   String password;
+  String name;
+  String uid;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference databaseReference =
+      Firestore.instance.collection('users');
 
   Future<void> registerUser() async {
-    AuthResult user = await _auth.createUserWithEmailAndPassword(
+    AuthResult result = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    print("Usuario registrado " + user.user.email);
+    FirebaseUser user = result.user;
+    uid = user.uid;
+    print("Usuario registrado " + result.user.email);
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MainPage(
-          user: user,
+          user: result,
         ),
       ),
     );
+  }
+
+  Future<void> createUser(String name, String email, String uid) async {
+    return await databaseReference.document(uid).setData({
+      'name': name,
+      'email': email,
+    });
   }
 
   @override
@@ -212,10 +225,23 @@ class _RegisterState extends State<Register> {
               border: const OutlineInputBorder(),
             ),
           ),
+          SizedBox(
+            height: 40.0,
+          ),
+          TextField(
+            autocorrect: false,
+            obscureText: false,
+            onChanged: (value) => name = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Name...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
           RaisedButton(
             child: Text('Register'),
             onPressed: () async {
               await registerUser();
+              await createUser(name, email, uid);
             },
           ),
         ],
@@ -308,16 +334,34 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  /*
+  //trying to read user info by id form firestore
+ Future<Group> getGroupInfo(String groupId) async {
+    var document =
+        Firestore.instance.collection("group").document(groupId).get();
+    return await document.then((doc) {
+      return Group.setGroup(doc);
+    });
+  }
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.user.user.email),
+        title: Text(widget.user.user.email + " \n " + widget.user.user.uid),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[],
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              hintText:
+                  "User name: " /* User name here, requires the previous comented code to work*/,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+        ],
       ),
     );
   }
