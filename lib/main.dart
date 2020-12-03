@@ -344,25 +344,49 @@ class _MainPageState extends State<MainPage> {
     });
   }
 */
+  String name;
+
+  getdata() async {
+    DocumentSnapshot variable = await Firestore.instance
+        .collection('users')
+        .document(widget.user.user.uid)
+        .get();
+
+    name = variable.data['name'];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.user.user.email + " \n " + widget.user.user.uid),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(
-              hintText:
-                  "User name: " /* User name here, requires the previous comented code to work*/,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-        ],
-      ),
+    return FutureBuilder<dynamic>(
+      future: getdata(), // function where you call your api
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        // AsyncSnapshot<Your object type>
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: Text('Please wait its loading...'));
+        } else {
+          if (snapshot.hasError)
+            return Center(child: Text('Error: ${snapshot.error}'));
+          else
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                    widget.user.user.email + " \n " + widget.user.user.uid),
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "User name: " + getdata().toString(),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+            );
+        }
+      },
     );
   }
 }
