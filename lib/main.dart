@@ -1,20 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:pruebaflutter/models/place.dart';
+import 'package:pruebaflutter/screens/search.dart';
+import 'package:pruebaflutter/services/geolocator_service.dart';
+import 'package:pruebaflutter/services/places_service.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final locatorService = GeoLocatorService();
+  final placesService = PlacesService();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    return MultiProvider(
+      providers: [
+        FutureProvider(create: (context) => locatorService.getLocation()),
+        FutureProvider(create: (context) {
+          ImageConfiguration configuration = createLocalImageConfiguration(context);
+          return BitmapDescriptor.fromAssetImage(configuration, 'assets/images/parking-icon.png');
+        }),
+        ProxyProvider2<Position, BitmapDescriptor,Future<List<Place>>>(
+          update: (context,position,icon,places) {
+            return (position != null) ? placesService.getPlaces(position.latitude,position.longitude, icon) : null;
+          },
+        )
+      ],
+    child: MaterialApp(
+        title: 'FastPark!',
+        theme: ThemeData(
         primarySwatch: Colors.blue,
+        ),
+        home: Search(),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
