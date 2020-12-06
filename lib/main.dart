@@ -1,3 +1,4 @@
+import 'package:fastPark_Users/screens/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,17 +18,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(),
-      //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      initialRoute: Home.id,
-      routes: {
-        MyHomePage.id: (context) => MyHomePage(),
-        Home.id: (context) => Home(),
-        Register.id: (context) => Register(),
-        Login.id: (context) => Login(),
-        MainPage.id: (context) => MainPage(),
-      },
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(),
+        //home: MyHomePage(title: 'Flutter Demo Home Page'),
+        initialRoute: Home.id,
+        routes: {
+          MyHomePage.id: (context) => MyHomePage(),
+          Home.id: (context) => Home(),
+          Register.id: (context) => Register(),
+          Login.id: (context) => Login(),
+          MainPage.id: (context) => MainPage(),
+          UserList.id: (context) => UserList(),
+        });
   }
 }

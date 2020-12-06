@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fastPark_Users/screens/chat.dart';
+import 'package:fastPark_Users/screens/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +35,7 @@ class _RegisterState extends State<Register> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MainPage(
+        builder: (context) => Chat(
           user: result,
         ),
       ),
