@@ -6,9 +6,11 @@ import '../models/user.dart';
 
 class Chat extends StatefulWidget {
   static const String id = "CHAT";
-  final AuthResult user;
+  final String user1;
+  final String user2;
+  final String current;
 
-  const Chat({Key key, this.user}) : super(key: key);
+  const Chat({Key key, this.user1, this.user2, this.current}) : super(key: key);
   @override
   _ChatState createState() => _ChatState();
 }
@@ -24,7 +26,8 @@ class _ChatState extends State<Chat> {
     if (messageController.text.length > 0) {
       await _firestore.collection('messages').add({
         'text': messageController.text,
-        'from': widget.user.user.email,
+        'User1': widget.user1,
+        'User2': widget.user2,
         'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
@@ -47,16 +50,7 @@ class _ChatState extends State<Chat> {
             child: Image.asset("assets/images/logo.png"),
           ),
         ),
-        title: Text("Tensor Chat"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () {
-              _auth.signOut();
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
-          )
-        ],
+        title: Text(widget.user1 + " and " + widget.user2 + " chat"),
       ),
       body: SafeArea(
         child: Column(
@@ -75,14 +69,38 @@ class _ChatState extends State<Chat> {
                     );
 
                   List<DocumentSnapshot> docs = snapshot.data.documents;
+                  List<DocumentSnapshot> filtered =
+                      new List<DocumentSnapshot>();
+                  List<Widget> messages;
 
-                  List<Widget> messages = docs
-                      .map((doc) => Message(
-                            from: doc.data['from'],
-                            text: doc.data['text'],
-                            me: widget.user.user.email == doc.data['from'],
-                          ))
-                      .toList();
+                  for (DocumentSnapshot doc in docs) {
+                    if ((doc.data['User1'].toString() == widget.user1 &&
+                            doc.data['User2'].toString() == widget.user2) ||
+                        (doc.data['User2'].toString() == widget.user1 &&
+                            doc.data['User1'].toString() == widget.user2)) {
+                      filtered.add(doc);
+                    }
+                  }
+
+                  if (widget.user1 == widget.current) {
+                    messages = filtered
+                        .map((doc) => Message(
+                              user1: doc.data['User1'],
+                              user2: doc.data['User2'],
+                              text: doc.data['text'],
+                              me: widget.user1 == doc.data['User1'],
+                            ))
+                        .toList();
+                  } else {
+                    messages = filtered
+                        .map((doc) => Message(
+                              user1: doc.data['User1'],
+                              user2: doc.data['User2'],
+                              text: doc.data['text'],
+                              me: widget.user1 == doc.data['User2'],
+                            ))
+                        .toList();
+                  }
 
                   return ListView(
                     controller: scrollController,
@@ -136,12 +154,14 @@ class SendButton extends StatelessWidget {
 }
 
 class Message extends StatelessWidget {
-  final String from;
+  final String user1;
+  final String user2;
   final String text;
 
   final bool me;
 
-  const Message({Key key, this.from, this.text, this.me}) : super(key: key);
+  const Message({Key key, this.user1, this.user2, this.text, this.me})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +171,7 @@ class Message extends StatelessWidget {
             me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            from,
+            user1,
           ),
           Material(
             color: me ? Colors.teal : Colors.red,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fastPark_Users/screens/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -46,26 +47,23 @@ class _UserListState extends State<UserList> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
-  Future<void> callback() async {
-    if (messageController.text.length > 0) {
-      await databaseReference.collection('messages').add({
-        'text': messageController.text,
-        'from': widget.user.user.email,
-        'date': DateTime.now().toIso8601String().toString(),
-      });
-      messageController.clear();
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300),
-      );
-    }
+  Future<void> change(String user1, String user2) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+          user1: user1,
+          user2: user2,
+          current: name,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: _getUser(), // function where you call your api
+      future: getdata(), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,6 +75,31 @@ class _UserListState extends State<UserList> {
             return Scaffold(
               appBar: AppBar(
                 title: Text("User Select"),
+              ),
+              body: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FlatButton(
+                        color: Colors.orange,
+                        child: Text("U1"),
+                        onPressed: () async {
+                          await change(name, "U1");
+                        }),
+                    FlatButton(
+                        color: Colors.orange,
+                        child: Text("U2"),
+                        onPressed: () async {
+                          await change(name, "U2");
+                        }),
+                    FlatButton(
+                        color: Colors.orange,
+                        child: Text("U3"),
+                        onPressed: () async {
+                          await change(name, "U3");
+                        }),
+                  ],
+                ),
               ),
               /*
               body: SafeArea(

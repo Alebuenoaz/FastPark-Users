@@ -35,7 +35,7 @@ class _RegisterState extends State<Register> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Chat(
+        builder: (context) => UserList(
           user: result,
         ),
       ),
