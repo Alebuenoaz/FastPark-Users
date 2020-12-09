@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  String email;
-  String name;
   String documentID;
+  String name;
+  String lastname;
+  String ci;
+  String email;
+  String img;
 
   User.fromSnapshot(DocumentSnapshot snapshot)
       : documentID = snapshot.documentID,
         name = snapshot['name'],
-        email = snapshot['email'];
+        lastname = snapshot['lastname'],
+        ci = snapshot['ci'],
+        email = snapshot['email'],
+        img = snapshot['img'];
 }

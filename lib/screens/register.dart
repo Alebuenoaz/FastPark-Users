@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fastPark_Users/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,23 +12,28 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  String documentID;
+  String name;
+  String lastname;
+  String ci;
   String email;
   String password;
-  String name;
-  String uid;
+  String img = '';
+  User user;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference databaseReference =
       Firestore.instance.collection('users');
 
-  Future<void> registerUser() async {
+  Future<void> registerUser(String newEmail) async {
+    print("REGISTRANDO USUARIO");
     AuthResult result = await _auth.createUserWithEmailAndPassword(
-      email: email,
+      email: newEmail,
       password: password,
     );
 
-    FirebaseUser user = result.user;
-    uid = user.uid;
+    FirebaseUser firebaseUser = result.user;
+    documentID = firebaseUser.uid;
     print("Usuario registrado " + result.user.email);
 
     Navigator.push(
@@ -40,10 +46,14 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Future<void> createUser(String name, String email, String uid) async {
-    return await databaseReference.document(uid).setData({
+  Future<void> createUser(User newUser) async {
+    print("CREANDO USUARIO");
+    return await databaseReference.document(documentID).setData({
       'name': name,
+      'lastname': lastname,
+      'ci': ci,
       'email': email,
+      'img': img,
     });
   }
 
@@ -57,6 +67,42 @@ class _RegisterState extends State<Register> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          TextField(
+            autocorrect: false,
+            obscureText: false,
+            onChanged: (value) => name = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Name...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
+          TextField(
+            autocorrect: false,
+            obscureText: false,
+            onChanged: (value) => lastname = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your Lastname...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
+          TextField(
+            autocorrect: false,
+            obscureText: false,
+            onChanged: (value) => ci = value,
+            decoration: InputDecoration(
+              hintText: "Enter Your CI...",
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
           TextField(
             keyboardType: TextInputType.emailAddress,
             onChanged: (value) => email = value,
@@ -80,20 +126,11 @@ class _RegisterState extends State<Register> {
           SizedBox(
             height: 40.0,
           ),
-          TextField(
-            autocorrect: false,
-            obscureText: false,
-            onChanged: (value) => name = value,
-            decoration: InputDecoration(
-              hintText: "Enter Your Name...",
-              border: const OutlineInputBorder(),
-            ),
-          ),
           RaisedButton(
             child: Text('Register'),
             onPressed: () async {
-              await registerUser();
-              await createUser(name, email, uid);
+              await registerUser(email);
+              await createUser(user);
             },
           ),
         ],
