@@ -1,3 +1,5 @@
+import 'package:fastPark_Users/screens/parkingView.dart';
+import 'package:fastPark_Users/screens/reserve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         Register.id: (context) => Register(),
         Login.id: (context) => Login(),
         MainPage.id: (context) => MainPage(),
+        ParkingView.id: (context) => ParkingView(),
+        Reserve.id: (context) => Reserve(),
       },
     );
   }

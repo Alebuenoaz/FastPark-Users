@@ -16,6 +16,59 @@ class _ReserveState extends State<Reserve> {
   TimeOfDay endTimePicked;
   String dropdownValue = 'Mediano';
 
+  void makeReserve(BuildContext context) async {
+    try {
+      String localStartTime = getTimeFormat(startTime);
+      String localEndTime = getTimeFormat(endTime);
+      if (verifyHours(localStartTime, localEndTime, context) &&
+          dropdownValue != "") {
+        await firestore.collection('Reservas').document('Reserva1').setData({
+          'IDParqueo': 'testing',
+          'HoraInicio': localStartTime,
+          'HoraFinal': localEndTime,
+          'TamañoAuto': dropdownValue,
+        });
+        //Show completed action toast
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Su reserva fue registrada correctamente"),
+        ));
+        Navigator.of(context).pop();
+      } else {
+        _showMyDialog(context,
+            "Las horas de inicio y fin estan mal definidas o fuera de los límites de atención del parqueo");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  bool verifyHours(
+      String startTimeString, String endTimeString, BuildContext context) {
+    int initialHour = int.parse(
+        startTimeString.split(":")[0] + startTimeString.split(":")[1]);
+    int finalHour =
+        int.parse(endTimeString.split(":")[0] + endTimeString.split(":")[1]);
+    if (initialHour < finalHour) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  String getTimeFormat(TimeOfDay time) {
+    String timeHourString = (time.hour).toString();
+    String timeMinuteString = (time.minute).toString();
+
+    if (timeMinuteString.length == 1) {
+      if (timeMinuteString == '0')
+        timeMinuteString += '0';
+      else {
+        timeMinuteString = '0' + timeMinuteString;
+      }
+    }
+    return "$timeHourString:$timeMinuteString";
+  }
+
   Future<Null> _selectStartTime(BuildContext context) async {
     startTimePicked = await showTimePicker(
       context: context,
@@ -38,6 +91,28 @@ class _ReserveState extends State<Reserve> {
       });
   }
 
+  Future _showMyDialog(BuildContext context, String warning) async {
+    return showDialog(
+      context: context,
+      builder: (_) => _buildAlertDialog(context, warning),
+    );
+  }
+
+  Widget _buildAlertDialog(BuildContext context, String warning) {
+    return AlertDialog(
+      title: Text('Error'),
+      content: Text(warning),
+      actions: [
+        FlatButton(
+            child: Text("Aceptar"),
+            textColor: Colors.blue,
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +126,7 @@ class _ReserveState extends State<Reserve> {
           Container(
             height: 10.0,
           ),
-          Text('Seleccione tiempo de su reserva:'),
+          Text('Seleccione el tiempo que durará su reserva:'),
           new Container(
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +191,9 @@ class _ReserveState extends State<Reserve> {
             child: RaisedButton(
                 child: Text('RESERVAR'),
                 color: Colors.lightBlue,
-                onPressed: () {}),
+                onPressed: () async {
+                  makeReserve(context);
+                }),
           ),
         ],
       ),
