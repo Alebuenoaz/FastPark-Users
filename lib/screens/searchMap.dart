@@ -24,6 +24,9 @@ class _MapsPageState extends State<SearchMap> {
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
       markerId: markerId,
+      onTap: (){
+        print(markerIdVal);
+      },
       position:
           LatLng(double.parse(specify['lat']), double.parse(specify['lng'])),
       infoWindow: InfoWindow(title: specify['name'], snippet: specify['direction']),

@@ -17,16 +17,6 @@ class _MapsPageState extends State<LocationMap> {
     final currentPosition = Provider.of<Position>(context);
     GoogleMapController _mapController;
     LatLng middlePoint = (currentPosition != null) ? new LatLng(currentPosition.latitude, currentPosition.longitude) : null;
-
-    // double screenWidth = MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio;
-    // double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
-
-    // double middleX = screenWidth / 2;
-    // double middleY = screenHeight / 2;
-
-    // ScreenCoordinate screenCoordinate = ScreenCoordinate(x: middleX.round(), y: middleY.round());
-
-    // LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
     
     return Scaffold(
       // appBar: AppBar(
@@ -64,12 +54,10 @@ class _MapsPageState extends State<LocationMap> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  // child: Image(image: AssetImage("assets/images/parking-icon.png")),
                   child: new Icon(Icons.location_on, color: Theme.of(context).primaryColor ,size: 30),
                 ),
                 Container(
                   alignment: Alignment.bottomCenter,
-                  // child: Image(image: AssetImage("assets/images/parking-icon.png")),
                   child: MaterialButton(
                     splashColor: Theme.of(context).secondaryHeaderColor,
                     color: Theme.of(context).primaryColor,
