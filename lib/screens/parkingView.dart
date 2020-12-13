@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -72,6 +73,34 @@ class _ParkingViewState extends State<ParkingView> {
     }
     workingDays = workingDays.substring(0, workingDays.length - 3);
     return workingDays;
+  }
+
+  Future<void> change(String user1, String user2) async {
+    bool crear = true;
+    QuerySnapshot variable = await Firestore.instance
+        .collection(/*"messages"*/ "chats")
+        .getDocuments();
+    for (DocumentSnapshot doc in variable.documents) {
+      if (doc.data["From"] == user1 && doc.data["To"] == user2) {
+        crear = false;
+      }
+    }
+    if (crear) {
+      await firestore.collection('chats').add({
+        'From': user1,
+        'To': user2,
+      });
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+          user1: user1,
+          user2: user2,
+          current: /*widget.idUser*/ "U1",
+        ),
+      ),
+    );
   }
 
   @override
@@ -155,8 +184,10 @@ class _ParkingViewState extends State<ParkingView> {
                               buttonColor: Colors.green,
                               child: RaisedButton(
                                 child: Text('Chat'),
-                                onPressed: () {
-                                  //await getProductById('testing');
+                                onPressed: () async {
+                                  await change(
+                                      /*widget.idUser*/ "U1",
+                                      idParkingManager);
                                 },
                               ),
                             ),
