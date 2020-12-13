@@ -40,6 +40,7 @@ class _CuentaState extends State<Cuenta> {
   Widget cuerpo(context, Autenticacion autenticacion) {
     //var isLoggedIn = Provider.of<bool>(context);
     var user = Provider.of<FirebaseUser>(context);
+    var userData = Provider.of<User>(context);
     bool loaded = user != null;
     return ListView(
       padding: EdgeInsets.all(0.0),
@@ -61,7 +62,7 @@ class _CuentaState extends State<Cuenta> {
                     nombre = text;
                   },
                   //print(text);
-                  value: user.uid ?? '',
+                  value: userData.nombre ?? '',
                 );
               }),
           SizedBox(height: 10.0),
@@ -79,7 +80,7 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeApellido;
                     apellido = text;
                   },
-                  value: snapshot.data ?? '',
+                  value: userData.apellido ?? '',
                 );
               }),
           SizedBox(height: 10.0),
@@ -97,7 +98,7 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeCi;
                     ci = text;
                   },
-                  value: snapshot.data ?? '',
+                  value: userData.ci ?? '',
                 );
               }),
           SizedBox(height: 10.0),
@@ -116,7 +117,7 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeEmail;
                     correo = text;
                   },
-                  value: user.email ?? '',
+                  value: userData.email ?? '',
                 );
               }),
         ],

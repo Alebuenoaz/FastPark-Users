@@ -10,6 +10,9 @@ class ParkingView extends StatefulWidget {
   static const String id = "PARKINGVIEW";
   final String idParking;
   final String idUser;
+  //final Parking parking;
+
+  //ParkingView([this.parking, this.idParking, this.idUser]);
 
   const ParkingView({Key key, this.idParking, this.idUser}) : super(key: key);
 

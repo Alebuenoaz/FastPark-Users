@@ -1,3 +1,4 @@
+import 'package:fast_park/services/firestore.dart';
 import 'package:fast_park/services/places_service.dart';
 import 'package:fast_park/services/geolocator_service.dart';
 import 'package:fast_park/providers/autenticacion.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'models/place.dart';
+import 'models/usuarios.dart';
 
 final autenticacion = Autenticacion();
 void main() {
@@ -33,6 +35,7 @@ class _MyAppState extends State<MyApp> {
   final placesService = PlacesService();
   @override
   Widget build(BuildContext context) {
+    final firestoreService = FirestoreServ();
     return MultiProvider(providers: [
       Provider(create: (context) => autenticacion),
       FutureProvider(
@@ -40,6 +43,8 @@ class _MyAppState extends State<MyApp> {
       ),
       StreamProvider<FirebaseUser>.value(
           value: FirebaseAuth.instance.onAuthStateChanged),
+      StreamProvider<User>(create: (context) => autenticacion.user),
+      //StreamProvider(create: (context) => firestoreService.streamParking()),
       FutureProvider(create: (context) => locatorService.getLocation()),
       FutureProvider(create: (context) {
         ImageConfiguration configuration =

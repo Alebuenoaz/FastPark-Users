@@ -37,11 +37,17 @@ class FirestoreServ {
   }
 
   Stream<List<Parking>> streamParking(FirebaseUser user) {
-    var ref = _db.collection('RegistroParqueos');
+    return _db
+        .collection('RegistroParqueos')
+        .where('userID', isEqualTo: user.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Parking.fromFirestore(document))
+            .toList());
     //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
     //.snapshots();
-    return ref.snapshots().map((list) =>
-        list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+    //return ref.snapshots().map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
     //return ref.map((list) =>
     //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
   }
