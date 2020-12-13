@@ -81,92 +81,102 @@ class _ParkingViewState extends State<ParkingView> {
               appBar: AppBar(
                 title: Text("Información del Parqueo"),
               ),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    height: 300,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: img == null
-                            ? AssetImage("assets/loading.png")
-                            : NetworkImage(img),
-                        fit: BoxFit.fill,
+              body: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        height: 300,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: img == null
+                                ? AssetImage("assets/loading.png")
+                                : NetworkImage(img),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Dirección: \n" + direction),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Descripcion del parqueo: \n" + description),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Precio por hora: \n" + pricePerHour.toString() + " Bs"),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Horario de atención: \n" + startTime + " - " + endTime),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Días disponibles: \n" + openDays()),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Teléfono del parqueo: \n" + contactNumber.toString()),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  new Container(
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ButtonTheme(
-                          minWidth: 180.0,
-                          height: 50.0,
-                          buttonColor: Colors.green,
-                          child: RaisedButton(
-                            child: Text('Chat'),
-                            onPressed: () {
-                              //await getProductById('testing');
-                            },
-                          ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Dirección: \n" + direction),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Descripcion del parqueo: \n" + description),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Precio por hora: \n" +
+                          pricePerHour.toString() +
+                          " Bs"),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Horario de atención: \n" +
+                          startTime +
+                          " - " +
+                          endTime),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Días disponibles: \n" + openDays()),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Teléfono del parqueo: \n" +
+                          contactNumber.toString()),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      new Container(
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ButtonTheme(
+                              minWidth: 180.0,
+                              height: 50.0,
+                              buttonColor: Colors.green,
+                              child: RaisedButton(
+                                child: Text('Chat'),
+                                onPressed: () {
+                                  //await getProductById('testing');
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 25,
+                            ),
+                            ButtonTheme(
+                              minWidth: 180.0,
+                              height: 50.0,
+                              child: RaisedButton(
+                                child: Text('Reservar'),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Reserve(
+                                        minTime: startTime,
+                                        maxTime: endTime,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          width: 25,
-                        ),
-                        ButtonTheme(
-                          minWidth: 180.0,
-                          height: 50.0,
-                          child: RaisedButton(
-                            child: Text('Reservar'),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Reserve(
-                                    minTime: startTime,
-                                    maxTime: endTime,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           }
