@@ -46,16 +46,6 @@ class Home extends StatelessWidget {
               Navigator.of(context).pushNamed(LocationMap.id);
             },
           ),
-          RaisedButton(
-            child: Text('Vista Parqueo'),
-            onPressed: () {
-              //Navigator.of(context).pushNamed(ParkingView.id);
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new ParkingView()));
-            },
-          ),
         ],
       ),
     );
