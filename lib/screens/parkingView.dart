@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fastPark_Users/screens/reserve.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 import '../models/parking.dart';
 import 'reserve.dart';
@@ -71,7 +72,7 @@ class _ParkingViewState extends State<ParkingView> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: Text('Cargando...'));
+          return LoadingFlipping.circle();
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
