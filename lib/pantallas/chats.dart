@@ -11,7 +11,7 @@ class Chats extends StatelessWidget {
         child: cuerpo(),
       );
     } else {
-      Scaffold(
+      return Scaffold(
         body: cuerpo(),
       );
     }

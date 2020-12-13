@@ -51,30 +51,48 @@ class _CrearCuentaState extends State<CrearCuenta> {
                   image: AssetImage('imagenes/logo.png'), fit: BoxFit.fill)),
         ),
         //
-        SizedBox(height: 150.0),
-        /*
-        StreamBuilder<String>(builder: (context, snapshot) {
-          // ignore: missing_required_param
-          return CorreoPass(
-            hintText: 'Nombre',
-            isIOS: Platform.isIOS,
-            obscureText: false,
-            texto: TextInputType.text,
-          );
-        }),
-        //
+        SizedBox(height: 100.0),
+        StreamBuilder<String>(
+            stream: autenticacion.nombre,
+            builder: (context, snapshot) {
+              // ignore: missing_required_param
+              return CorreoPass(
+                hintText: 'Nombre',
+                isIOS: Platform.isIOS,
+                obscureText: false,
+                texto: TextInputType.text,
+                errorText: snapshot.error,
+                onChanged: autenticacion.changeNombre,
+              );
+            }),
         SizedBox(height: 10.0),
-        //
-        StreamBuilder<String>(builder: (context, snapshot) {
-          // ignore: missing_required_param
-          return CorreoPass(
-            hintText: 'Apellido',
-            isIOS: Platform.isIOS,
-            obscureText: false,
-            texto: TextInputType.text,
-          );
-        }),
-        */
+        StreamBuilder<String>(
+            stream: autenticacion.apellido,
+            builder: (context, snapshot) {
+              // ignore: missing_required_param
+              return CorreoPass(
+                hintText: 'Apellido',
+                isIOS: Platform.isIOS,
+                obscureText: false,
+                texto: TextInputType.text,
+                errorText: snapshot.error,
+                onChanged: autenticacion.changeApellido,
+              );
+            }),
+        SizedBox(height: 10.0),
+        StreamBuilder<String>(
+            stream: autenticacion.ci,
+            builder: (context, snapshot) {
+              // ignore: missing_required_param
+              return CorreoPass(
+                hintText: 'CI',
+                isIOS: Platform.isIOS,
+                obscureText: false,
+                texto: TextInputType.number,
+                errorText: snapshot.error,
+                onChanged: autenticacion.changeCi,
+              );
+            }),
         SizedBox(height: 10.0),
         //
         StreamBuilder<String>(

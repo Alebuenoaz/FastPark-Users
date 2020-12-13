@@ -14,17 +14,18 @@ class CorreoPass extends StatefulWidget {
   final bool obscureText;
   final void Function(String) onChanged;
   final String errorText;
+  final String value;
 
-  CorreoPass({
-    @required this.hintText,
-    @required this.androidIcons,
-    @required this.iOSIcons,
-    @required this.texto,
-    @required this.isIOS,
-    @required this.obscureText,
-    @required this.onChanged,
-    @required this.errorText,
-  });
+  CorreoPass(
+      {@required this.hintText,
+      @required this.androidIcons,
+      @required this.iOSIcons,
+      @required this.texto,
+      @required this.isIOS,
+      @required this.obscureText,
+      @required this.onChanged,
+      @required this.errorText,
+      this.value});
 
   @override
   _CorreoPassState createState() => _CorreoPassState();
@@ -37,7 +38,7 @@ class _CorreoPassState extends State<CorreoPass> {
 
   @override
   void initState() {
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.value ?? '');
     _nodo = FocusNode();
     _nodo.addListener(_cambioFocus);
     mostrarErrorCupertino = false;
@@ -122,6 +123,7 @@ class _CorreoPassState extends State<CorreoPass> {
           obscureText:
               (widget.obscureText != null) ? widget.obscureText : false,
           onChanged: widget.onChanged,
+          controller: _controller,
         ),
       );
     }

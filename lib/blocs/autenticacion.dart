@@ -12,16 +12,20 @@ class Autenticacion {
   final _email = BehaviorSubject<String>();
   final _password = BehaviorSubject<String>();
   final _user = BehaviorSubject<User>();
-  //final _nombre = BehaviorSubject<String>();
-  //final _apellido = BehaviorSubject<String>();
+  final _nombre = BehaviorSubject<String>();
+  final _apellido = BehaviorSubject<String>();
+  final _ci = BehaviorSubject<String>();
+  final _img = BehaviorSubject<String>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreServ _firestoreServ = FirestoreServ();
 
 //Recibir Datos
   Stream<String> get email => _email.stream.transform(validateEmail);
   Stream<String> get password => _password.stream.transform(validatePassword);
-  //Stream<String> get nombre => _nombre.stream.transform(validateNombre);
-  //Stream<String> get apellido => _apellido.stream.transform(validateApellido);
+  Stream<String> get nombre => _nombre.stream.transform(validateNombre);
+  Stream<String> get apellido => _apellido.stream.transform(validateApellido);
+  Stream<String> get ci => _ci.stream.transform(validateCi);
+  Stream<String> get img => _img.stream.transform(validateImg);
 
   Stream<bool> get isValid => CombineLatestStream.combine2(
       email,
@@ -37,15 +41,19 @@ class Autenticacion {
 //Set
   Function(String) get changeEmail => _email.sink.add;
   Function(String) get changePassword => _password.sink.add;
-  //Function(String) get changeNombre => _nombre.sink.add;
-  //Function(String) get changeApellido => _apellido.sink.add;
+  Function(String) get changeNombre => _nombre.sink.add;
+  Function(String) get changeApellido => _apellido.sink.add;
+  Function(String) get changeCi => _ci.sink.add;
+  Function(String) get changeImg => _img.sink.add;
 
 //Cerrar
   dispose() {
     _email.close();
     _password.close();
-    // _nombre.close();
-    // _apellido.close();
+    _nombre.close();
+    _apellido.close();
+    _ci.close();
+    _img.close();
     _user.close();
   }
 
@@ -68,7 +76,7 @@ class Autenticacion {
     }
   });
 
-  /*final validateNombre = StreamTransformer<String, String>.fromHandlers(
+  final validateNombre = StreamTransformer<String, String>.fromHandlers(
       handleData: (nombre, sink) {
     if (nombre.length >= 1) {
       sink.add(nombre.trim());
@@ -84,7 +92,25 @@ class Autenticacion {
     } else {
       sink.addError('Introduzca su apellido');
     }
-  }); */
+  });
+
+  final validateCi =
+      StreamTransformer<String, String>.fromHandlers(handleData: (ci, sink) {
+    if (double.tryParse(ci) != null) {
+      sink.add(ci.trim());
+    } else {
+      sink.addError('Introduzca un CI válido');
+    }
+  });
+
+  final validateImg =
+      StreamTransformer<String, String>.fromHandlers(handleData: (img, sink) {
+    if (img.length >= 1) {
+      sink.add(img.trim());
+    } else {
+      sink.addError('Introduzca una imagen válida');
+    }
+  });
 
   //Funciones crear cuenta
 
@@ -93,7 +119,15 @@ class Autenticacion {
     try {
       AuthResult authResult = await _auth.createUserWithEmailAndPassword(
           email: _email.value.trim(), password: _password.value.trim());
-      var users = User(userId: authResult.user.uid, email: _email.value.trim());
+      //var users = User(userId: authResult.user.uid, email: _email.value.trim());
+      var users = User(
+          userId: authResult.user.uid,
+          nombre: _nombre.value.trim(),
+          apellido: _apellido.value.trim(),
+          ci: _ci.value.trim(),
+          email: _email.value.trim(),
+          img: '' //_img.value.trim(),
+          );
 
       await _firestoreServ.addUser(users);
     } catch (error) {
@@ -122,5 +156,38 @@ class Autenticacion {
 
     _user.sink.add(user);
     return true;
+  }
+
+  logout() async {
+    await _auth.signOut();
+    _user.sink.add(null);
+  }
+
+  updateUser() async {
+    print('Actualizando usuario');
+    print(nombre.last);
+    try {
+      //AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      //    email: _email.value.trim(), password: _password.value.trim());
+      //var users = User(userId: authResult.user.uid, email: _email.value.trim());
+      var users = User(
+          userId: _user.value.userId,
+          nombre: _apellido.value.trim(),
+          apellido: _apellido.value.trim(),
+          ci: _ci.value.trim(),
+          email: _email.value.trim(),
+          img: '' //_img.value.trim(),
+          );
+      print("Nombre" + _nombre.value);
+
+      await _firestoreServ.updateUser(users);
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  printData() async {
+    print('Nombre usuario');
+    print(_nombre.value);
   }
 }

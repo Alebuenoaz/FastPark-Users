@@ -16,6 +16,29 @@ class FirestoreServ {
         .collection('usuarios')
         .document(userId)
         .get()
-        .then((snapshot) => User.fromFirestore(snapshot.data));
+        .then((snapshot) => User.fromFirestore(snapshot));
   }
+
+  Stream<User> streamUser(String userId) {
+    return _db
+        .collection('usuarios')
+        .document(userId)
+        .snapshots()
+        .map((snap) => User.fromFirestore(snap));
+  }
+
+  Future<void> updateUser(User user) {
+    return _db
+        .collection('usuarios')
+        .document(user.userId)
+        .updateData(user.toMap());
+  }
+
+  /*Stream<User> streamParking(String userId) {
+    return _db
+        .collection('parqueos')
+        .document(userId)
+        .snapshots()
+        .map((snap) => User.fromFirestore(snap));
+  }*/
 }

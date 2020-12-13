@@ -1,8 +1,10 @@
+import 'package:fastpark/usuarios/usuarios.dart';
 import 'package:fastpark/blocs/autenticacion.dart';
 import 'package:fastpark/design/colores.dart';
 import 'package:fastpark/design/textosDes.dart';
 import 'package:fastpark/pantallas/loginFP.dart';
 import 'package:fastpark/servicios/rutas.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -29,7 +31,9 @@ class _MyAppState extends State<MyApp> {
       Provider(create: (context) => autenticacion),
       FutureProvider(
         create: (context) => autenticacion.isLoggedIn(),
-      )
+      ),
+      StreamProvider<FirebaseUser>.value(
+          value: FirebaseAuth.instance.onAuthStateChanged)
     ], child: Plataformas());
   }
 
@@ -65,7 +69,7 @@ class Plataformas extends StatelessWidget {
       return MaterialApp(
         theme: ThemeData(
           //brightness: Brightness.dark,
-          primarySwatch: ColoresApp.naranja,
+          primarySwatch: ColoresApp.naranjaMaterial,
         ),
         home: (isLoggedIn == null)
             ? cargando(false)
