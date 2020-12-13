@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
+import 'package:fastPark_Users/screens/parkingView.dart';
 
 class SearchMap extends StatefulWidget {
   static const String id = "SEARCH_MAP";
@@ -28,10 +29,18 @@ class _MapsPageState extends State<SearchMap> {
       markerId: markerId,
       onTap: (){
         print(markerIdVal);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ParkingView(
+              idParking: markerIdVal,
+            ),
+          ),
+        );
       },
       position:
           LatLng(double.parse(specify['lat']), double.parse(specify['lng'])),
-      infoWindow: InfoWindow(title: specify['name'], snippet: specify['direction']),
+      infoWindow: InfoWindow(title: specify['Nombre'], snippet: specify['direccion']),
       icon: BitmapDescriptor.fromBytes(markerIcon),
     );
     setState(() {
@@ -49,7 +58,7 @@ class _MapsPageState extends State<SearchMap> {
 
 
   getMarkerData() async {
-    Firestore.instance.collection('parqueos').getDocuments().then((myMockDoc) {
+    Firestore.instance.collection('RegistroParqueos').getDocuments().then((myMockDoc) {
       if (myMockDoc.documents.isNotEmpty) {
         for (int i = 0; i < myMockDoc.documents.length; i++) {
           initMarker(myMockDoc.documents[i].data, myMockDoc.documents[i].documentID);

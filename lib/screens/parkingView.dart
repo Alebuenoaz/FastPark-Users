@@ -8,6 +8,9 @@ import 'reserve.dart';
 
 class ParkingView extends StatefulWidget {
   static const String id = "PARKINGVIEW";
+  final String idParking;
+
+  const ParkingView({Key key, this.idParking}) : super(key: key);
 
   @override
   _ParkingViewState createState() => _ParkingViewState();
@@ -68,7 +71,7 @@ class _ParkingViewState extends State<ParkingView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: getProductById("testing2"), // function where you call your api
+      future: getProductById(widget.idParking), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
