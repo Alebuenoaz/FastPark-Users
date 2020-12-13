@@ -1,13 +1,14 @@
 import 'package:fast_park/blocs/autenticacion.dart';
 import 'package:fast_park/design/colores.dart';
 import 'package:fast_park/design/textosDes.dart';
-import 'package:fast_park/pantallas/homeFP.dart';
-import 'package:fast_park/pantallas/loginFP.dart';
-import 'package:fast_park/servicios/rutas.dart';
+import 'package:fast_park/screens/homeFP.dart';
+import 'package:fast_park/screens/loginFP.dart';
+import 'package:fast_park/services/rutas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final autenticacion = Autenticacion();
 void main() {
@@ -27,7 +28,9 @@ class _MyAppState extends State<MyApp> {
       Provider(create: (context) => autenticacion),
       FutureProvider(
         create: (context) => autenticacion.isLoggedIn(),
-      )
+      ),
+      StreamProvider<FirebaseUser>.value(
+          value: FirebaseAuth.instance.onAuthStateChanged)
     ], child: Plataformas());
   }
 

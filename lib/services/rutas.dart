@@ -2,12 +2,12 @@
 //pero nos permite llamar a assets directamente
 //sin iniciar la clase desde otro widget
 
-import 'package:fast_park/pantallas/homeFP.dart';
-import 'package:fast_park/pantallas/crearFP.dart';
-import 'package:fast_park/pantallas/loginFP.dart';
-import 'package:fast_park/pantallas/owner.dart';
-import 'package:fast_park/pantallas/parqueosOwner.dart';
-import 'package:fast_park/pantallas/usuarioHome.dart';
+import 'package:fast_park/screens/homeFP.dart';
+import 'package:fast_park/screens/crearFP.dart';
+import 'package:fast_park/screens/loginFP.dart';
+import 'package:fast_park/screens/owner.dart';
+import 'package:fast_park/screens/parqueosOwner.dart';
+import 'package:fast_park/screens/usuarioHome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

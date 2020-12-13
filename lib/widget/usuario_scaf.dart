@@ -1,7 +1,7 @@
 import 'package:fast_park/design/colores.dart';
-import 'package:fast_park/pantallas/chatUsuario.dart';
-import 'package:fast_park/pantallas/cuentaUsuario.dart';
-import 'package:fast_park/pantallas/parqueosUsuario.dart';
+import 'package:fast_park/screens/chatUsuario.dart';
+import 'package:fast_park/screens/cuentaUsuario.dart';
+import 'package:fast_park/screens/parqueosUsuario.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class UsuarioScaff {

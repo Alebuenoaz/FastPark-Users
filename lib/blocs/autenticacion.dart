@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:fast_park/servicios/firestore.dart';
-import 'package:fast_park/usuarios/usuarios.dart';
+import 'package:fast_park/services/firestore.dart';
+import 'package:fast_park/models/usuarios.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -21,8 +21,18 @@ class Autenticacion {
   final facebook = FacebookLogin();
   final google = GoogleSignIn(scopes: ['email']);
 
+  final _nombre = BehaviorSubject<String>();
+  final _apellido = BehaviorSubject<String>();
+  final _ci = BehaviorSubject<String>();
+  final _img = BehaviorSubject<String>();
+
+//Recibir Datos
   Stream<String> get email => _email.stream.transform(validateEmail);
   Stream<String> get password => _password.stream.transform(validatePassword);
+  Stream<String> get nombre => _nombre.stream.transform(validateNombre);
+  Stream<String> get apellido => _apellido.stream.transform(validateApellido);
+  Stream<String> get ci => _ci.stream.transform(validateCi);
+  Stream<String> get img => _img.stream.transform(validateImg);
 
   Stream<bool> get isValid => CombineLatestStream.combine2(
       email,
@@ -35,21 +45,30 @@ class Autenticacion {
           true);
   Stream<User> get user => _user.stream;
   Stream<String> get errorMessage => _error.stream;
-//
+
+  //Transformer
+
+//Set
   Function(String) get changeEmail => _email.sink.add;
   Function(String) get changePassword => _password.sink.add;
+  Function(String) get changeNombre => _nombre.sink.add;
+  Function(String) get changeApellido => _apellido.sink.add;
+  Function(String) get changeCi => _ci.sink.add;
+  Function(String) get changeImg => _img.sink.add;
 
-  //Cerrar
+//Cerrar
   dispose() {
     _email.close();
     _password.close();
-    // _nombre.close();
-    // _apellido.close();
+    _nombre.close();
+    _apellido.close();
+    _ci.close();
+    _img.close();
     _user.close();
-    _error.close();
   }
 
-  //Transformer
+//Transformar
+
   final validateEmail =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
     if (regExpEmail.hasMatch(email.trim())) {
@@ -68,12 +87,58 @@ class Autenticacion {
     }
   });
 
+  final validateNombre = StreamTransformer<String, String>.fromHandlers(
+      handleData: (nombre, sink) {
+    if (nombre.length >= 1) {
+      sink.add(nombre.trim());
+    } else {
+      sink.addError('Introduzca su nombre');
+    }
+  });
+
+  final validateApellido = StreamTransformer<String, String>.fromHandlers(
+      handleData: (nombre, sink) {
+    if (nombre.length >= 1) {
+      sink.add(nombre.trim());
+    } else {
+      sink.addError('Introduzca su apellido');
+    }
+  });
+
+  final validateCi =
+      StreamTransformer<String, String>.fromHandlers(handleData: (ci, sink) {
+    if (double.tryParse(ci) != null) {
+      sink.add(ci.trim());
+    } else {
+      sink.addError('Introduzca un CI válido');
+    }
+  });
+
+  final validateImg =
+      StreamTransformer<String, String>.fromHandlers(handleData: (img, sink) {
+    if (img.length >= 1) {
+      sink.add(img.trim());
+    } else {
+      sink.addError('Introduzca una imagen válida');
+    }
+  });
+
+  //Funciones crear cuenta
+
   signupEmail() async {
     print('Registrando usuario');
     try {
       AuthResult authResult = await _auth.createUserWithEmailAndPassword(
           email: _email.value.trim(), password: _password.value.trim());
-      var users = User(userId: authResult.user.uid, email: _email.value.trim());
+
+      var users = User(
+          userId: authResult.user.uid,
+          nombre: _nombre.value.trim(),
+          apellido: _apellido.value.trim(),
+          ci: _ci.value.trim(),
+          email: _email.value.trim(),
+          img: '' //_img.value.trim(),
+          );
       await _firestoreServ.addUser(users);
       _user.sink.add(users);
     } on PlatformException catch (error) {
@@ -174,5 +239,33 @@ class Autenticacion {
 
   limpiarError() {
     _error.sink.add('');
+  }
+
+  updateUser() async {
+    print('Actualizando usuario');
+    print(nombre.last);
+    try {
+      //AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      //    email: _email.value.trim(), password: _password.value.trim());
+      //var users = User(userId: authResult.user.uid, email: _email.value.trim());
+      var users = User(
+          userId: _user.value.userId,
+          nombre: _apellido.value.trim(),
+          apellido: _apellido.value.trim(),
+          ci: _ci.value.trim(),
+          email: _email.value.trim(),
+          img: '' //_img.value.trim(),
+          );
+      print("Nombre" + _nombre.value);
+
+      await _firestoreServ.updateUser(users);
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  printData() async {
+    print('Nombre usuario');
+    print(_nombre.value);
   }
 }

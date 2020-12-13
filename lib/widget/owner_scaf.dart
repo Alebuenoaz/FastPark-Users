@@ -1,8 +1,8 @@
 import 'package:fast_park/design/colores.dart';
-import 'package:fast_park/pantallas/chatsOwner.dart';
-import 'package:fast_park/pantallas/cuentaOwner.dart';
-import 'package:fast_park/pantallas/parqueosOwner.dart';
-import 'package:fast_park/pantallas/reservasOwner.dart';
+import 'package:fast_park/screens/chatsOwner.dart';
+import 'package:fast_park/screens/cuentaOwner.dart';
+import 'package:fast_park/screens/parqueosOwner.dart';
+import 'package:fast_park/screens/reservasOwner.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class OwnerScaff {

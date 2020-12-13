@@ -14,6 +14,7 @@ class CorreoPass extends StatefulWidget {
   final bool obscureText;
   final void Function(String) onChanged;
   final String errorText;
+  final String value;
 
   CorreoPass({
     @required this.hintText,
@@ -24,6 +25,7 @@ class CorreoPass extends StatefulWidget {
     this.obscureText,
     @required this.onChanged,
     @required this.errorText,
+    this.value,
   });
 
   @override
@@ -40,7 +42,7 @@ class _CorreoPassState extends State<CorreoPass> {
     _nodo = FocusNode();
     _nodo.addListener(_handleFocusChange);
     displayCuperError = false;
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.value ?? '');
     super.initState();
   }
 
@@ -63,6 +65,7 @@ class _CorreoPassState extends State<CorreoPass> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     if (widget.isIOS) {
       return Padding(
@@ -122,6 +125,7 @@ class _CorreoPassState extends State<CorreoPass> {
           obscureText:
               (widget.obscureText != null) ? widget.obscureText : false,
           onChanged: widget.onChanged,
+          controller: _controller,
         ),
       );
     }
