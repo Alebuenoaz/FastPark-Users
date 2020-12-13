@@ -136,7 +136,7 @@ class _ParkingViewState extends State<ParkingView> {
                           buttonColor: Colors.green,
                           child: RaisedButton(
                             child: Text('Chat'),
-                            onPressed: () async {
+                            onPressed: () {
                               //await getProductById('testing');
                             },
                           ),
@@ -151,9 +151,14 @@ class _ParkingViewState extends State<ParkingView> {
                             child: Text('Reservar'),
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => new Reserve()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Reserve(
+                                    minTime: startTime,
+                                    maxTime: endTime,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ),

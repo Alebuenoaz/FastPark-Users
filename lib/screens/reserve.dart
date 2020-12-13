@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 class Reserve extends StatefulWidget {
   static const String id = "RESERVE";
+  final String minTime;
+  final String maxTime;
+
+  const Reserve({Key key, this.minTime, this.maxTime}) : super(key: key);
 
   @override
   _ReserveState createState() => _ReserveState();
@@ -20,7 +24,9 @@ class _ReserveState extends State<Reserve> {
     try {
       String localStartTime = getTimeFormat(startTime);
       String localEndTime = getTimeFormat(endTime);
-      if (verifyHours(localStartTime, localEndTime, context) &&
+      String minTime = widget.minTime;
+      String maxTime = widget.maxTime;
+      if (verifyHours(localStartTime, localEndTime, minTime, maxTime) &&
           dropdownValue != "") {
         await firestore.collection('Reservas').document('Reserva1').setData({
           'IDParqueo': 'testing',
@@ -42,17 +48,30 @@ class _ReserveState extends State<Reserve> {
     }
   }
 
-  bool verifyHours(
-      String startTimeString, String endTimeString, BuildContext context) {
+  bool verifyHours(String startTimeString, String endTimeString,
+      String minTimeString, String maxTimeString) {
     int initialHour = int.parse(
         startTimeString.split(":")[0] + startTimeString.split(":")[1]);
     int finalHour =
         int.parse(endTimeString.split(":")[0] + endTimeString.split(":")[1]);
-    if (initialHour < finalHour) {
+    int minHour =
+        int.parse(minTimeString.split(":")[0] + minTimeString.split(":")[1]);
+    int maxHour =
+        int.parse(maxTimeString.split(":")[0] + maxTimeString.split(":")[1]);
+    if (initialHour < finalHour &&
+        meetTimeBoundries(initialHour, minHour, maxHour) &&
+        meetTimeBoundries(finalHour, minHour, maxHour)) {
       return true;
     } else {
       return false;
     }
+  }
+
+  bool meetTimeBoundries(int selectedHour, int minHour, int maxHour) {
+    if (selectedHour >= minHour && selectedHour <= maxHour)
+      return true;
+    else
+      return false;
   }
 
   String getTimeFormat(TimeOfDay time) {
@@ -164,10 +183,10 @@ class _ReserveState extends State<Reserve> {
             icon: Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
-            style: TextStyle(color: Colors.deepPurple),
+            style: TextStyle(color: Colors.blueAccent),
             underline: Container(
               height: 2,
-              color: Colors.deepPurpleAccent,
+              color: Colors.blueAccent,
             ),
             onChanged: (String newValue) {
               setState(() {
