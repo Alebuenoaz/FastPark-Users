@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 
+//needed for client: change(), harcoded buttons
+//needed for owner: getall(), all inside expanded() in _UserlistState Widget build, all Members statelesswidget
+
 class UserList extends StatefulWidget {
   static const String id = "MAIN";
   final AuthResult user;
@@ -17,7 +20,27 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   String name;
+  List<String> usuarios = new List<String>();
 
+  //loads all valid chats for the owner, meaning, a client started it first
+  getAll() async {
+    getdata();
+
+    List<DocumentSnapshot> docs = new List<DocumentSnapshot>();
+    QuerySnapshot variable = await Firestore.instance
+        .collection(/*"messages"*/ "chats")
+        .getDocuments();
+
+    docs = variable.documents;
+
+    for (DocumentSnapshot doc in docs) {
+      if (doc.data["To"].toString() == name) {
+        usuarios.add(doc.data["From"].toString());
+      }
+    }
+  }
+
+  //recovers active user data
   getdata() async {
     DocumentSnapshot variable = await Firestore.instance
         .collection('users')
@@ -28,26 +51,27 @@ class _UserListState extends State<UserList> {
   }
 
   final databaseReference = Firestore.instance;
-  Future<User> _getUser() async {
-    User user = await databaseReference
-        .collection("users")
-        .document(widget.user.user.uid)
-        .get()
-        .then((snapshot) {
-      try {
-        return User.fromSnapshot(snapshot);
-      } catch (e) {
-        print(e);
-        return null;
-      }
-    });
-    return user;
-  }
 
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
+  //Creates a chat from the client chat if it doesnt exist already and changes the screen to the active chat
   Future<void> change(String user1, String user2) async {
+    bool crear = true;
+    QuerySnapshot variable = await Firestore.instance
+        .collection(/*"messages"*/ "chats")
+        .getDocuments();
+    for (DocumentSnapshot doc in variable.documents) {
+      if (doc.data["From"] == user1 && doc.data["To"] == user2) {
+        crear = false;
+      }
+    }
+    if (crear) {
+      await databaseReference.collection('chats').add({
+        'From': user1,
+        'To': user2,
+      });
+    }
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -63,7 +87,7 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: getdata(), // function where you call your api
+      future: getAll(), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -71,15 +95,39 @@ class _UserListState extends State<UserList> {
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
-          else
+          else {
             return Scaffold(
               appBar: AppBar(
-                title: Text("User Select"),
+                title: Text("User Select " + name),
               ),
               body: SafeArea(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Text("Active owner chats"),
+                    Expanded(
+                      //Owner generated list start
+                      child: StreamBuilder<QuerySnapshot>(
+                        builder: (context, snapshot) {
+                          List<Widget> users = new List<Widget>();
+                          //builds user chats button list for owners
+                          users = usuarios
+                              .map((user) => Members(
+                                    user: user,
+                                    current: name,
+                                  ))
+                              .toList();
+                          return ListView(
+                            controller: scrollController,
+                            children: <Widget>[
+                              ...users,
+                            ],
+                          );
+                        },
+                      ),
+                    ), //Owner generated list end
+                    Text(
+                        "Chat Start button for the customers"), //Start for the hard buttons for client chat start
                     FlatButton(
                         color: Colors.orange,
                         child: Text("U1"),
@@ -97,51 +145,12 @@ class _UserListState extends State<UserList> {
                         child: Text("U3"),
                         onPressed: () async {
                           await change(name, "U3");
-                        }),
+                        }), //End for the hardbuttons for client chat start
                   ],
                 ),
               ),
-              /*
-              body: SafeArea(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream:
-                            databaseReference.collection('users').snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-
-                          List<DocumentSnapshot> docs = snapshot.data.documents;
-                          //problem handling listview inside futture builder, map with (doc){} solves but renders nothing
-                          List<Widget> members = docs
-                              .map((doc) => Members(
-                                    //from: doc.data['from'],
-                                    text: doc.data['name'],
-                                    uid: widget.user.user.email,
-                                    uid2: doc.documentID,
-                                    //me: widget.user.user.email ==
-                                    //   doc.data['from'],
-                                  ))
-                              .toList();
-                          //posible solution> use ListView.builder, but dont know how to
-                          return ListView(
-                            controller: scrollController,
-                            children: <Widget>[
-                              ...members,
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),*/
             );
+          }
         }
       },
     );
@@ -149,59 +158,42 @@ class _UserListState extends State<UserList> {
 }
 
 class Members extends StatelessWidget {
-  //final String from;
-  final String text;
-  final String uid;
-  final String uid2;
-  final databaseReference = Firestore.instance;
-
-  //final bool me;
+  final String user;
+  final String current;
 
   Members({
     Key key,
-    /* this.from,*/
-    this.text,
-    this.uid,
-    this.uid2,
-    /* this.me*/
+    this.user,
+    this.current,
   }) : super(key: key);
-
-  _createRecord(String uid1, String uid2) async {
-    bool exists = false;
-    QuerySnapshot chats =
-        await databaseReference.collection("chats").getDocuments();
-
-    for (var docs in chats.documents) {
-      if (docs.data["User1"] == uid1 || docs.data["User2"] == uid2) {
-        exists = true;
-      }
-    }
-
-    if (!exists) {
-      await databaseReference
-          .collection("chats")
-          .document()
-          .setData({'User1': uid, 'User2': uid2});
-    }
-
-    /*
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainPage(
-          user: user,
-        ),
-      ),
-    );
-    */
-  }
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.orange,
-      onPressed: _createRecord(uid, uid2),
-      child: Text(text),
+    return Container(
+      child: Column(
+        children: <Widget>[
+          FlatButton(
+              color: Colors.orange,
+              child: Text(user),
+              onPressed: () async {
+                await change(current, user, context);
+              }),
+        ],
+      ),
+    );
+  }
+
+  //Changes page to the active chat
+  Future<void> change(String user1, String user2, BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+          user1: user2,
+          user2: user1,
+          current: current,
+        ),
+      ),
     );
   }
 }
