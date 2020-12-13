@@ -5,8 +5,10 @@ class Reserve extends StatefulWidget {
   static const String id = "RESERVE";
   final String minTime;
   final String maxTime;
+  final String parkingID;
 
-  const Reserve({Key key, this.minTime, this.maxTime}) : super(key: key);
+  const Reserve({Key key, this.minTime, this.maxTime, this.parkingID})
+      : super(key: key);
 
   @override
   _ReserveState createState() => _ReserveState();
@@ -29,15 +31,15 @@ class _ReserveState extends State<Reserve> {
       if (verifyHours(localStartTime, localEndTime, minTime, maxTime) &&
           dropdownValue != "") {
         await firestore.collection('Reservas').document('Reserva1').setData({
-          'IDParqueo': 'testing',
+          'IDParqueo': widget.parkingID,
           'HoraInicio': localStartTime,
           'HoraFinal': localEndTime,
           'TamañoAuto': dropdownValue,
         });
         //Show completed action toast
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: Text("Su reserva fue registrada correctamente"),
-        // ));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Su reserva fue registrada correctamente"),
+        ));
         Navigator.of(context).pop();
       } else {
         _showMyDialog(context,
@@ -160,7 +162,7 @@ class _ReserveState extends State<Reserve> {
                 Text('Desde ${startTime.hour}:${startTime.minute}',
                     style: TextStyle(fontSize: 17)),
                 Container(
-                  width: 35,
+                  width: 25,
                 ),
                 IconButton(
                   icon: Icon(Icons.alarm),

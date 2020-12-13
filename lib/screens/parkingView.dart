@@ -9,8 +9,9 @@ import 'reserve.dart';
 class ParkingView extends StatefulWidget {
   static const String id = "PARKINGVIEW";
   final String idParking;
+  final String idUser;
 
-  const ParkingView({Key key, this.idParking}) : super(key: key);
+  const ParkingView({Key key, this.idParking, this.idUser}) : super(key: key);
 
   @override
   _ParkingViewState createState() => _ParkingViewState();
@@ -18,6 +19,7 @@ class ParkingView extends StatefulWidget {
 
 class _ParkingViewState extends State<ParkingView> {
   Firestore firestore = Firestore.instance;
+  String idParkingManager;
   String description;
   String direction;
   String days;
@@ -41,6 +43,7 @@ class _ParkingViewState extends State<ParkingView> {
       }
     });
 
+    idParkingManager = parking.idParkingManager;
     description = parking.description;
     direction = parking.direction;
     days = parking.days;
@@ -71,7 +74,8 @@ class _ParkingViewState extends State<ParkingView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: getProductById(widget.idParking), // function where you call your api
+      future:
+          getProductById(widget.idParking), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -168,6 +172,7 @@ class _ParkingViewState extends State<ParkingView> {
                                       builder: (context) => Reserve(
                                         minTime: startTime,
                                         maxTime: endTime,
+                                        parkingID: widget.idParking,
                                       ),
                                     ),
                                   );
