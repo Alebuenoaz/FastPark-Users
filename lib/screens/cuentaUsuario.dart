@@ -1,4 +1,4 @@
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/widget/buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/base.dart';
 import 'package:fast_park/design/colores.dart';
 import 'package:fast_park/design/textoCampos.dart';

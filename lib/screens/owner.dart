@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/barraDes.dart';
 import 'package:fast_park/screens/chatsOwner.dart';
 import 'package:fast_park/screens/cuentaOwner.dart';

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/models/parking.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

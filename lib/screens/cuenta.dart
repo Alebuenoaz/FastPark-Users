@@ -2,7 +2,7 @@ import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:fast_park/widget/correoPass.dart';
 import 'package:fast_park/widget/buttons.dart';
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

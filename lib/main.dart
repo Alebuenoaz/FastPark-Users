@@ -1,4 +1,4 @@
-import 'package:fast_park/blocs/autenticacion.dart';
+import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/colores.dart';
 import 'package:fast_park/design/textosDes.dart';
 import 'package:fast_park/screens/homeFP.dart';
