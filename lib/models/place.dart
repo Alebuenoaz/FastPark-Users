@@ -1,5 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pruebaflutter/models/geometry.dart';
+import 'package:fastPark_Users/models/geometry.dart';
 
 class Place {
   final String name;

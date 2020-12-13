@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
 class SearchMap extends StatefulWidget {
+  static const String id = "SEARCH_MAP";
+  
   @override
   _MapsPageState createState() => _MapsPageState();
 }
@@ -69,7 +71,7 @@ class _MapsPageState extends State<SearchMap> {
     
     return Scaffold(
       appBar: AppBar(
-            title: Center(child: Text('FastPark!')),
+            title: Text('FastPark!'),
           ),
         body: (currentPosition != null) ? 
             GoogleMap(

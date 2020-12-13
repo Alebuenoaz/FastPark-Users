@@ -1,4 +1,4 @@
-import 'package:pruebaflutter/models/location.dart';
+import 'package:fastPark_Users/models/location.dart';
 
 class Geometry {
   final Location location;

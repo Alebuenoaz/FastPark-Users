@@ -1,5 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pruebaflutter/models/place.dart';
+import 'package:fastPark_Users/models/place.dart';
 
 class MarkerService {
   List<Marker> getMarkers(List<Place> places) {

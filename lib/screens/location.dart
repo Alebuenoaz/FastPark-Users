@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class LocationMap extends StatefulWidget {
+  static const String id = "LOCATION";
+
   @override
   _MapsPageState createState() => _MapsPageState();
 }
