@@ -4,6 +4,7 @@ import 'package:fastpark/blocs/autenticacion.dart';
 import 'package:fastpark/design/colores.dart';
 import 'package:fastpark/pantallas/chats.dart';
 import 'package:fastpark/pantallas/cuenta.dart';
+import 'package:fastpark/pantallas/parkingView.dart';
 import 'package:fastpark/pantallas/reservas.dart';
 import 'package:fastpark/widget/barra.dart';
 import 'package:fastpark/widget/owner_scaf.dart';
@@ -80,7 +81,7 @@ class _OwnerState extends State<Owner> {
             body: TabBarView(
               children: <Widget>[
                 Chats(),
-                Reservas(),
+                ParkingView(),
                 Cuenta(),
               ],
             ),

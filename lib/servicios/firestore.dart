@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fastpark/parqueos/parking.dart';
 import 'package:fastpark/usuarios/usuarios.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreServ {
   Firestore _db = Firestore.instance;
@@ -34,11 +36,13 @@ class FirestoreServ {
         .updateData(user.toMap());
   }
 
-  /*Stream<User> streamParking(String userId) {
-    return _db
-        .collection('parqueos')
-        .document(userId)
-        .snapshots()
-        .map((snap) => User.fromFirestore(snap));
-  }*/
+  Stream<List<Parking>> streamParking(FirebaseUser user) {
+    var ref = _db.collection('RegistroParqueos');
+    //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
+    //.snapshots();
+    return ref.snapshots().map((list) =>
+        list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+    //return ref.map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+  }
 }

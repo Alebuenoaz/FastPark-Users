@@ -65,8 +65,8 @@ class _CuentaState extends State<Cuenta> {
                 );
               }),
           SizedBox(height: 10.0),
-          StreamBuilder<User>(
-              stream: autenticacion.user,
+          StreamBuilder<String>(
+              stream: autenticacion.apellido,
               builder: (context, snapshot) {
                 // ignore: missing_required_param
                 return CorreoPass(
@@ -79,12 +79,12 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeApellido;
                     apellido = text;
                   },
-                  value: snapshot.data.apellido ?? '',
+                  value: snapshot.data ?? '',
                 );
               }),
           SizedBox(height: 10.0),
-          StreamBuilder<User>(
-              stream: autenticacion.user,
+          StreamBuilder<String>(
+              stream: autenticacion.ci,
               builder: (context, snapshot) {
                 // ignore: missing_required_param
                 return CorreoPass(
@@ -97,13 +97,13 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeCi;
                     ci = text;
                   },
-                  value: snapshot.data.ci ?? '',
+                  value: snapshot.data ?? '',
                 );
               }),
           SizedBox(height: 10.0),
           //
-          StreamBuilder<User>(
-              stream: autenticacion.user,
+          StreamBuilder<String>(
+              stream: autenticacion.email,
               builder: (context, snapshot) {
                 // ignore: missing_required_param
                 return CorreoPass(
@@ -116,7 +116,7 @@ class _CuentaState extends State<Cuenta> {
                     autenticacion.changeEmail;
                     correo = text;
                   },
-                  value: snapshot.data.email ?? '',
+                  value: user.email ?? '',
                 );
               }),
         ],
