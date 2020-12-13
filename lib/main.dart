@@ -1,3 +1,5 @@
+import 'package:fast_park/services/places_service.dart';
+import 'package:fast_park/services/geolocator_service.dart';
 import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/colores.dart';
 import 'package:fast_park/design/textosDes.dart';
@@ -6,12 +8,17 @@ import 'package:fast_park/screens/loginFP.dart';
 import 'package:fast_park/services/rutas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'models/place.dart';
+
 final autenticacion = Autenticacion();
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -22,6 +29,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final locatorService = GeoLocatorService();
+  final placesService = PlacesService();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
@@ -30,7 +39,22 @@ class _MyAppState extends State<MyApp> {
         create: (context) => autenticacion.isLoggedIn(),
       ),
       StreamProvider<FirebaseUser>.value(
-          value: FirebaseAuth.instance.onAuthStateChanged)
+          value: FirebaseAuth.instance.onAuthStateChanged),
+      FutureProvider(create: (context) => locatorService.getLocation()),
+      FutureProvider(create: (context) {
+        ImageConfiguration configuration =
+            createLocalImageConfiguration(context);
+        return BitmapDescriptor.fromAssetImage(
+            configuration, 'assets/images/parking-icon.png');
+      }),
+      ProxyProvider2<Position, BitmapDescriptor, Future<List<Place>>>(
+        update: (context, position, icon, places) {
+          return (position != null)
+              ? placesService.getPlaces(
+                  position.latitude, position.longitude, icon)
+              : null;
+        },
+      )
     ], child: Plataformas());
   }
 

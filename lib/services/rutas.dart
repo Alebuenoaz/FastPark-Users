@@ -2,6 +2,8 @@
 //pero nos permite llamar a assets directamente
 //sin iniciar la clase desde otro widget
 
+import 'package:fast_park/screens/location.dart';
+import 'package:fast_park/screens/searchMap.dart';
 import 'package:fast_park/screens/homeFP.dart';
 import 'package:fast_park/screens/crearFP.dart';
 import 'package:fast_park/screens/loginFP.dart';
@@ -33,6 +35,12 @@ abstract class Rutas {
       case "/usuarioHomeFP":
         return MaterialPageRoute(builder: (context) => HomeUsuario());
 
+      case "/searchMap":
+        return MaterialPageRoute(builder: (context) => SearchMap());
+
+      case "/ownLocation":
+        return MaterialPageRoute(builder: (context) => LocationMap());
+
       default:
         return MaterialPageRoute(builder: (context) => Login());
     }
@@ -58,6 +66,12 @@ abstract class Rutas {
 
       case "/usuarioHomeFP":
         return CupertinoPageRoute(builder: (context) => HomeUsuario());
+
+      case "/searchMap":
+        return CupertinoPageRoute(builder: (context) => SearchMap());
+
+      case "/ownLocation":
+        return CupertinoPageRoute(builder: (context) => LocationMap());
 
       default:
         return CupertinoPageRoute(builder: (context) => Login());

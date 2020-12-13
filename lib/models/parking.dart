@@ -8,12 +8,14 @@ class Parking {
   final String startTime;
   final String endTime;
   final String img;
+  final String idParkingManager;
   final double pricePerHour;
   final int contactNumber;
   final int userID;
 
   Parking(
-      {this.description,
+      {this.idParkingManager,
+      this.description,
       this.direction,
       this.days,
       this.startTime,
@@ -53,16 +55,16 @@ class Parking {
   factory Parking.fromFirestore(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> firestore = documentSnapshot.data;
     return Parking(
-      description: firestore['description'],
-      direction: firestore['direction'],
-      days: firestore['days'],
-      startTime: firestore['startTime'],
-      endTime: firestore['endTime'],
-      img: firestore['img'],
-      pricePerHour: firestore['pricePerHour'],
-      contactNumber: firestore['contactNumber'],
-      userID: firestore['userID'],
-      documentID: firestore['documentID'],
+      documentID: documentSnapshot.documentID,
+      idParkingManager: documentSnapshot['IDManager'],
+      description: documentSnapshot['Descripcion'],
+      direction: documentSnapshot['Direccion'],
+      days: documentSnapshot['Dias'],
+      startTime: documentSnapshot['HoraInicio'],
+      endTime: documentSnapshot['HoraCierre'],
+      img: documentSnapshot['Imagen'],
+      pricePerHour: documentSnapshot['TarifaPorHora'],
+      contactNumber: documentSnapshot['Telefono'],
     );
   }
 }
