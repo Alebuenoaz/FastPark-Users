@@ -1,3 +1,4 @@
+import 'package:fastPark_Users/screens/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _LoginState extends State<Login> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MainPage(
+        builder: (context) => UserList(
           user: user,
         ),
       ),
