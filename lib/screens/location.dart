@@ -15,6 +15,8 @@ class _MapsPageState extends State<LocationMap> {
   Widget build(BuildContext context) {
 
     final currentPosition = Provider.of<Position>(context);
+    GoogleMapController _mapController;
+    LatLng middlePoint = (currentPosition != null) ? new LatLng(currentPosition.latitude, currentPosition.longitude) : null;
 
     // double screenWidth = MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio;
     // double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
@@ -27,25 +29,65 @@ class _MapsPageState extends State<LocationMap> {
     // LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
     
     return Scaffold(
-      appBar: AppBar(
-            title: Center(child: Text('FastPark!')),
-          ),
+      // appBar: AppBar(
+      //       title: Center(child: Text('FastPark!')),
+      //     ),
         body: (currentPosition != null) ? 
-            Container(
-              height: MediaQuery.of(context).size.height/2,
-              width: MediaQuery.of(context).size.width,
-              child: GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude),zoom: 18.0),
-              onMapCreated: (GoogleMapController controller) {
-                controller = controller;
-              },
-              zoomGesturesEnabled: true,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              zoomControlsEnabled: false,
-              ),
+            Stack(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition:
+                        CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude),zoom: 18.0),
+                    onMapCreated: (GoogleMapController controller) {
+                      _mapController  = controller;
+                    },
+                    zoomGesturesEnabled: true,
+                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                    onCameraMove: (CameraPosition camposition) async {
+                        double screenWidth = MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio;
+                        double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
+
+                        double middleX = screenWidth / 2;
+                        double middleY = screenHeight / 2;
+
+                        ScreenCoordinate screenCoordinate = ScreenCoordinate(x: middleX.round(), y: middleY.round());
+
+                        middlePoint = await _mapController.getLatLng(screenCoordinate);
+                    },
+                    ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  // child: Image(image: AssetImage("assets/images/parking-icon.png")),
+                  child: new Icon(Icons.location_on, color: Theme.of(context).primaryColor ,size: 30),
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  // child: Image(image: AssetImage("assets/images/parking-icon.png")),
+                  child: MaterialButton(
+                    splashColor: Theme.of(context).secondaryHeaderColor,
+                    color: Theme.of(context).primaryColor,
+                    shape: StadiumBorder(),
+                    child: Text(
+                      'Aceptar',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: (){
+                      print("Coordenadas: ");
+                      print(middlePoint);
+                    },
+                  ),
+                ),
+              ]
             )
             : Center(
             child: CircularProgressIndicator(),

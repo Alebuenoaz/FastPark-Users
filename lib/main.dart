@@ -4,8 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:pruebaflutter/models/place.dart';
+import 'package:pruebaflutter/screens/location.dart';
 // import 'package:pruebaflutter/screens/search.dart';
-import 'package:pruebaflutter/screens/searchMap.dart';
+// import 'package:pruebaflutter/screens/searchMap.dart';
 import 'package:pruebaflutter/services/geolocator_service.dart';
 import 'package:pruebaflutter/services/places_service.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
         primarySwatch: Colors.blue,
         ),
-        home: SearchMap(),
+        home: LocationMap(),
       ),
     );
   }
