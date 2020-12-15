@@ -66,7 +66,7 @@ class ParkingList extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
-                              ParkingView(/*parkings[index]*/)));
+                              ParkingView(parkings[index].documentID)));
                     },
                   );
                 })

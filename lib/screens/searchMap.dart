@@ -32,9 +32,7 @@ class _MapsPageState extends State<SearchMap> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ParkingView(
-              idParking: markerIdVal,
-            ),
+            builder: (context) => ParkingView(markerIdVal),
           ),
         );
       },

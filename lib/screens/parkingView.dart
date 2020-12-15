@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/reserve.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:provider/provider.dart';
 
 import '../models/parking.dart';
 import 'reserve.dart';
 
 class ParkingView extends StatefulWidget {
   static const String id = "PARKINGVIEW";
+  //final String idParking;
+  //final String idUser;
   final String idParking;
-  final String idUser;
-  //final Parking parking;
 
-  //ParkingView([this.parking, this.idParking, this.idUser]);
+  ParkingView([this.idParking]);
 
-  const ParkingView({Key key, this.idParking, this.idUser}) : super(key: key);
+  //const ParkingView({Key key, this.idParking, this.idUser}) : super(key: key);
 
   @override
   _ParkingViewState createState() => _ParkingViewState();
@@ -105,6 +107,7 @@ class _ParkingViewState extends State<ParkingView> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<FirebaseUser>(context);
     return FutureBuilder<dynamic>(
       future:
           getProductById(widget.idParking), // function where you call your api
