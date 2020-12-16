@@ -102,7 +102,8 @@ class Plataformas extends StatelessWidget {
                   ? HomeFP()
                   : Login(),
           onGenerateRoute: Rutas.materialRoutes,
-          theme: ThemeData(scaffoldBackgroundColor: Colors.white));
+          theme: ThemeData(scaffoldBackgroundColor: Colors.white,
+          primarySwatch: Colors.orange));
     }
   }
 

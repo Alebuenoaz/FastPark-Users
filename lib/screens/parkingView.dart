@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../models/parking.dart';
 import 'reserve.dart';
@@ -105,6 +106,61 @@ class _ParkingViewState extends State<ParkingView> {
     );
   }
 
+  // TextEditingController controller = TextEditingController();
+  var rating = 0.0;
+  final databaseReference = Firestore.instance;
+
+    void createRecord(value, userID, parkingID) async {
+    DocumentReference ref = await databaseReference.collection("puntuaciones")
+      .add({
+        'value': value,
+        'userID': userID,
+        'parkingID': parkingID 
+      });
+  }
+
+  Future<String> createDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Califica este Parqueo"),
+          content: SmoothStarRating(
+            rating: rating,
+            size: 45,
+            starCount: 5,
+            isReadOnly: false,
+            onRated: (value) {
+                rating = value;
+            },
+          ),
+          actions: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              child: MaterialButton(
+                      splashColor: Theme.of(context).secondaryHeaderColor,
+                      color: Theme.of(context).primaryColor,
+                      shape: StadiumBorder(),
+                      child: Text(
+                        'Enviar',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: (){
+                        print(rating.toString());
+                        createRecord(rating.toString(), 'U1', widget.idParking);
+                        Navigator.of(context).pop(rating.toString());
+                      },
+                    ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
@@ -114,7 +170,7 @@ class _ParkingViewState extends State<ParkingView> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return LoadingFlipping.circle();
+          return CircularProgressIndicator();
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -195,7 +251,7 @@ class _ParkingViewState extends State<ParkingView> {
                               ),
                             ),
                             Container(
-                              width: 25,
+                              width: 10,
                             ),
                             ButtonTheme(
                               minWidth: 180.0,
@@ -218,6 +274,24 @@ class _ParkingViewState extends State<ParkingView> {
                             ),
                           ],
                         ),
+                      ),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: MaterialButton(
+                                splashColor: Theme.of(context).secondaryHeaderColor,
+                                color: Theme.of(context).primaryColor,
+                                shape: StadiumBorder(),
+                                child: Text(
+                                  'Calificar',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: (){
+                                  createDialog(context);
+                                },
+                              ),
                       ),
                     ],
                   ),

@@ -24,7 +24,7 @@ class HomeFP extends StatelessWidget {
         Botones(
           textoBoton: 'Modo usuario',
           tipoBoton: TipoBoton.BotonLogin,
-          onPressed: () => Navigator.pushNamed(context, '/usuarioHomeFP'),
+          onPressed: () => Navigator.pushNamed(context, '/searchMap'),
         ),
         Botones(
           textoBoton: 'Modo dueño',
