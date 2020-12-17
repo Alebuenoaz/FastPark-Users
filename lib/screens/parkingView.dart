@@ -119,7 +119,7 @@ class _ParkingViewState extends State<ParkingView> {
       });
   }
 
-  Future<String> createDialog(BuildContext context) {
+  Future<String> createDialog(BuildContext context, String user) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -150,7 +150,7 @@ class _ParkingViewState extends State<ParkingView> {
                       ),
                       onPressed: (){
                         print(rating.toString());
-                        createRecord(rating.toString(), 'U1', widget.idParking);
+                        createRecord(rating.toString(), user, widget.idParking);
                         Navigator.of(context).pop(rating.toString());
                       },
                     ),
@@ -289,7 +289,7 @@ class _ParkingViewState extends State<ParkingView> {
                                   ),
                                 ),
                                 onPressed: (){
-                                  createDialog(context);
+                                  createDialog(context, user.uid);
                                 },
                               ),
                       ),
