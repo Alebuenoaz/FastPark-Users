@@ -1,9 +1,9 @@
 import 'dart:ui';
-import 'package:fastpark/design/colores.dart';
+import 'package:fast_park/design/colores.dart';
 
 abstract class BarraDes {
   static Color get unselectedLabelColor {
-    return ColoresApp.naranjaClaro;
+    return ColoresApp.grisclaro;
   }
 
   static Color get selectedLabelColor {

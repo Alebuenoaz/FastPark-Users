@@ -1,6 +1,6 @@
-import 'package:fastpark/design/base.dart';
-import 'package:fastpark/design/botonesDes.dart';
-import 'package:fastpark/design/colores.dart';
+import 'package:fast_park/design/base.dart';
+import 'package:fast_park/design/botonesDes.dart';
+import 'package:fast_park/design/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,8 +9,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class BotonesRedes extends StatelessWidget {
   final String textoRedes;
   final TipoRedes tipoRedes;
+  final VoidCallback onPressed;
 
-  BotonesRedes({@required this.textoRedes, @required this.tipoRedes});
+  BotonesRedes(
+      {@required this.textoRedes, @required this.tipoRedes, this.onPressed});
 
   Color iconoColor;
   Color colorBoton;
@@ -37,8 +39,8 @@ class BotonesRedes extends StatelessWidget {
 
         break;
     }
-    return Padding(
-      padding: EstilosBase.listPadding,
+    return GestureDetector(
+      onTap: onPressed,
       child: Container(
         height: EstiloBotones.buttonHeight,
         width: EstiloBotones.buttonHeight,

@@ -1,4 +1,4 @@
-import 'package:fastpark/design/colores.dart';
+import 'package:fast_park/design/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

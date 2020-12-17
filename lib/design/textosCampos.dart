@@ -1,6 +1,6 @@
-import 'package:fastpark/design/base.dart';
-import 'package:fastpark/design/colores.dart';
-import 'package:fastpark/design/textosDes.dart';
+import 'package:fast_park/design/base.dart';
+import 'package:fast_park/design/colores.dart';
+import 'package:fast_park/design/textosDes.dart';
 import 'package:flutter/material.dart';
 
 abstract class TextosCampos {

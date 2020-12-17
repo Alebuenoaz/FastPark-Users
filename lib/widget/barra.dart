@@ -1,5 +1,5 @@
-import 'package:fastpark/design/colores.dart';
-import 'package:fastpark/design/textosDes.dart';
+import 'package:fast_park/design/colores.dart';
+import 'package:fast_park/design/textosDes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,9 @@ abstract class Barra {
   static CupertinoSliverNavigationBar cupertinoBarra(
       {String title, BuildContext context}) {
     return CupertinoSliverNavigationBar(
-      largeTitle: Text(title, style: TextosDes.titulo),
+      largeTitle: Text(title),
       backgroundColor: Colors.transparent,
-      border: null,
+      //border: null,
     );
   }
 

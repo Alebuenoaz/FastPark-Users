@@ -1,9 +1,9 @@
-import 'package:fastpark/design/colores.dart';
-import 'package:fastpark/design/textosCampos.dart';
-import 'package:fastpark/design/textosDes.dart';
+import 'dart:io';
+
+import 'package:fast_park/design/textoCampos.dart';
+import 'package:fast_park/design/textosDes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CorreoPass extends StatefulWidget {
   final String hintText;
@@ -14,16 +14,18 @@ class CorreoPass extends StatefulWidget {
   final bool obscureText;
   final void Function(String) onChanged;
   final String errorText;
+  final String value;
 
   CorreoPass({
     @required this.hintText,
     @required this.androidIcons,
     @required this.iOSIcons,
-    @required this.texto,
+    this.texto,
     @required this.isIOS,
-    @required this.obscureText,
+    this.obscureText,
     @required this.onChanged,
     @required this.errorText,
+    this.value,
   });
 
   @override
@@ -32,30 +34,32 @@ class CorreoPass extends StatefulWidget {
 
 class _CorreoPassState extends State<CorreoPass> {
   FocusNode _nodo;
-  bool mostrarErrorCupertino;
+  bool displayCuperError;
   TextEditingController _controller;
 
   @override
   void initState() {
-    _controller = TextEditingController();
     _nodo = FocusNode();
-    _nodo.addListener(_cambioFocus);
-    mostrarErrorCupertino = false;
+    _nodo.addListener(_handleFocusChange);
+    displayCuperError = false;
+    _controller = TextEditingController(text: widget.value ?? '');
     super.initState();
   }
 
-  void _cambioFocus() {
+  void _handleFocusChange() {
+    print('Focus changed');
     if (_nodo.hasFocus == false && widget.errorText != null) {
-      mostrarErrorCupertino = true;
+      displayCuperError = true;
     } else {
-      mostrarErrorCupertino = false;
+      displayCuperError = false;
     }
+
     widget.onChanged(_controller.text);
   }
 
   @override
   void dispose() {
-    _nodo.removeListener(_cambioFocus);
+    _nodo.removeListener(_handleFocusChange);
     _nodo.dispose();
     _controller.dispose();
     super.dispose();
@@ -74,14 +78,12 @@ class _CorreoPassState extends State<CorreoPass> {
             CupertinoTextField(
               keyboardType:
                   (widget.texto != null) ? widget.texto : TextInputType.text,
-              padding: EdgeInsets.all(12.0),
               placeholder: widget.hintText,
               placeholderStyle: TextosCampos.placeholder(),
               style: TextosCampos.text(),
               textAlign: TextAlign.center,
-              cursorColor: TextosCampos.colorCursor(),
-              decoration: (mostrarErrorCupertino)
-                  ? TextosCampos.cupertinoError
+              decoration: (displayCuperError)
+                  ? TextosCampos.cupertinoErrorDes
                   : TextosCampos.cupertino,
               prefix: TextosCampos.iconPrefix(widget.iOSIcons),
               obscureText:
@@ -112,16 +114,18 @@ class _CorreoPassState extends State<CorreoPass> {
           horizontal: TextosCampos.textBoxHorizonatal(),
           vertical: TextosCampos.textBoxVertical(),
         ),
-        child: TextFormField(
+        child: TextField(
           keyboardType:
               (widget.texto != null) ? widget.texto : TextInputType.text,
-          cursorColor: ColoresApp.naranja,
+          cursorColor: TextosCampos.colorCursor(),
+          style: TextosCampos.text(),
           textAlign: TextosCampos.textAlign(),
           decoration: TextosCampos.androidIcons(
               widget.hintText, widget.androidIcons, widget.errorText),
           obscureText:
               (widget.obscureText != null) ? widget.obscureText : false,
           onChanged: widget.onChanged,
+          controller: _controller,
         ),
       );
     }

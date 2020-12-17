@@ -1,26 +1,29 @@
-import 'package:fastpark/design/colores.dart';
-import 'package:fastpark/pantallas/chats.dart';
-import 'package:fastpark/pantallas/cuenta.dart';
-import 'package:fastpark/pantallas/reservas.dart';
+import 'package:fast_park/design/colores.dart';
+import 'package:fast_park/screens/chatsOwner.dart';
+import 'package:fast_park/screens/cuentaOwner.dart';
+import 'package:fast_park/screens/parqueosOwner.dart';
+import 'package:fast_park/screens/reservasOwner.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 abstract class OwnerScaff {
-  //iOS
   static CupertinoTabScaffold get cupertinoTabScaffold {
     return CupertinoTabScaffold(
-      tabBar: _cupertinoTab,
+      tabBar: _cupertinoBarra,
       tabBuilder: (context, index) {
         return _eleccion(index);
       },
     );
   }
 
-  static get _cupertinoTab {
+  static get _cupertinoBarra {
     return CupertinoTabBar(
       backgroundColor: ColoresApp.naranjaClaro,
       items: <BottomNavigationBarItem>[
         // ignore: deprecated_member_use
+        BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.location),
+            // ignore: deprecated_member_use
+            title: Text('Parqueos')),
         BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.chat_bubble_2),
             // ignore: deprecated_member_use
@@ -34,25 +37,26 @@ abstract class OwnerScaff {
         BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.person),
             // ignore: deprecated_member_use
-            title: Text('Cuenta'))
+            title: Text('Cuenta')),
       ],
     );
   }
 
   static Widget _eleccion(int index) {
     if (index == 0) {
-      return Chats();
+      return ParqueosOwner();
     }
 
     if (index == 1) {
-      return Reservas();
+      return ChatsOwner();
     }
 
     if (index == 2) {
-      return Cuenta();
+      return ReservasOwner();
+    }
+
+    if (index == 3) {
+      return CuentaOwner();
     }
   }
-
-  //Android
-
 }
