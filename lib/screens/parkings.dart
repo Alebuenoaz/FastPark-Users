@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/models/parking.dart';
+import 'package:fast_park/screens/parkingRegister.dart';
 import 'package:fast_park/screens/parkingView.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 class Parkings extends StatefulWidget {
@@ -57,10 +59,71 @@ class ParkingList extends StatelessWidget {
     return Container(
         height: 300,
         child: (parkings != null)
-            ? ListView.builder(
-                itemCount: parkings.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
+            ? ListView(
+                children: parkings.map((parking) {
+                  //itemCount: parkings.length,
+                  //itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: parking.img == null
+                                ? AssetImage("assets/loading.png")
+                                : NetworkImage(parking.img),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      //Text(parking.img, style: TextStyle(fontSize: 50)),
+                      title: Text(parking.direction),
+                      subtitle: //Text(parking.description),
+                          Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 3.0,
+                          ),
+                          //(places[index].rating != null)
+                          (true)
+                              ? Row(
+                                  children: <Widget>[
+                                    RatingBarIndicator(
+                                      rating: 3,
+                                      itemBuilder: (context, index) =>
+                                          Icon(Icons.star, color: Colors.amber),
+                                      itemCount: 5,
+                                      itemSize: 10.0,
+                                      direction: Axis.horizontal,
+                                    )
+                                  ],
+                                )
+                              : Row(),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(parking.description),
+                        ],
+                      ),
+                      onTap: () {
+                        //},
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ParkingView(parking.documentID)));
+                      },
+                      trailing: IconButton(
+                        icon: Icon(Icons.edit),
+                        color: Theme.of(context).primaryColor,
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ParkingRegister(parking)));
+                        },
+                      ),
+                    ),
+                  );
+                  /*return ListTile(
                     title: Text(parkings[index].contactNumber.toString()),
                     trailing: Text(parkings[index].description),
                     onTap: () {
@@ -68,8 +131,12 @@ class ParkingList extends StatelessWidget {
                           builder: (context) =>
                               ParkingView(parkings[index].documentID)));
                     },
-                  );
-                })
+                    
+                  );*/
+                }).toList(),
+              )
+            //})
             : Center(child: CircularProgressIndicator()));
+    //);
   }
 }

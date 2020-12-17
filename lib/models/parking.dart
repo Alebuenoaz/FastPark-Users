@@ -12,19 +12,24 @@ class Parking {
   final double pricePerHour;
   final int contactNumber;
   final int userID;
+  final int ownerID;
+  final String name;
 
-  Parking(
-      {this.idParkingManager,
-      this.description,
-      this.direction,
-      this.days,
-      this.startTime,
-      this.endTime,
-      this.img,
-      this.pricePerHour,
-      this.contactNumber,
-      this.userID,
-      this.documentID});
+  Parking({
+    this.idParkingManager,
+    this.description,
+    this.direction,
+    this.days,
+    this.startTime,
+    this.endTime,
+    this.img,
+    this.pricePerHour,
+    this.contactNumber,
+    this.userID,
+    this.documentID,
+    this.ownerID,
+    this.name,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -65,6 +70,9 @@ class Parking {
       img: documentSnapshot['Imagen'],
       pricePerHour: documentSnapshot['TarifaPorHora'],
       contactNumber: documentSnapshot['Telefono'],
+      userID: documentSnapshot['CIPropio'],
+      ownerID: documentSnapshot['CIPropietario'],
+      name: documentSnapshot['Nombre'],
     );
   }
 }
