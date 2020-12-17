@@ -69,9 +69,10 @@ class _CrearCuentaState extends State<CrearCuenta> {
               image: DecorationImage(
                   image: AssetImage('imagenes/logo.png'), fit: BoxFit.fill)),
         ),
-        //
         SizedBox(height: 75.0),
-        StreamBuilder<String>(
+        Column(
+          children: <Widget>[
+            StreamBuilder<String>(
             stream: autenticacion.nombre,
             builder: (context, snapshot) {
               // ignore: missing_required_param
@@ -84,78 +85,79 @@ class _CrearCuentaState extends State<CrearCuenta> {
                 onChanged: autenticacion.changeNombre,
               );
             }),
-        SizedBox(height: 10.0),
-        StreamBuilder<String>(
-            stream: autenticacion.apellido,
-            builder: (context, snapshot) {
-              // ignore: missing_required_param
-              return CorreoPass(
-                hintText: 'Apellido',
-                isIOS: Platform.isIOS,
-                obscureText: false,
-                texto: TextInputType.text,
-                errorText: snapshot.error,
-                onChanged: autenticacion.changeApellido,
-              );
-            }),
-        SizedBox(height: 10.0),
-        StreamBuilder<String>(
-            stream: autenticacion.ci,
-            builder: (context, snapshot) {
-              // ignore: missing_required_param
-              return CorreoPass(
-                hintText: 'CI',
-                isIOS: Platform.isIOS,
-                obscureText: false,
-                texto: TextInputType.number,
-                errorText: snapshot.error,
-                onChanged: autenticacion.changeCi,
-              );
-            }),
-        SizedBox(height: 10.0),
-        //
-        StreamBuilder<String>(
-            stream: autenticacion.email,
-            builder: (context, snapshot) {
-              // ignore: missing_required_param
-              return CorreoPass(
-                  hintText: 'Correo',
-                  isIOS: Platform.isIOS,
-                  texto: TextInputType.emailAddress,
-                  obscureText: false,
-                  onChanged: autenticacion.changeEmail,
-                  errorText: snapshot.error);
-            }),
-        //
-        SizedBox(height: 10.0),
-        //
-        StreamBuilder<String>(
-            stream: autenticacion.password,
-            builder: (context, snapshot) {
-              // ignore: missing_required_param
-              return CorreoPass(
-                  hintText: 'Contraseña',
-                  isIOS: Platform.isIOS,
-                  texto: TextInputType.text,
-                  obscureText: true,
-                  onChanged: autenticacion.changePassword,
-                  errorText: snapshot.error);
-            }),
-        //
-        SizedBox(height: 75.0),
-        //
-        StreamBuilder<bool>(
-            stream: autenticacion.isValid,
-            builder: (context, snapshot) {
-              return Botones(
-                textoBoton: 'Registrate',
-                tipoBoton: (snapshot.data == true)
-                    ? TipoBoton.BotonLogin
-                    : TipoBoton.Deshabilitado,
-                onPressed: autenticacion.signupEmail,
-              );
-            }),
-        //
+            SizedBox(height: 10.0),
+            StreamBuilder<String>(
+                stream: autenticacion.apellido,
+                builder: (context, snapshot) {
+                  // ignore: missing_required_param
+                  return CorreoPass(
+                    hintText: 'Apellido',
+                    isIOS: Platform.isIOS,
+                    obscureText: false,
+                    texto: TextInputType.text,
+                    errorText: snapshot.error,
+                    onChanged: autenticacion.changeApellido,
+                  );
+                }),
+            SizedBox(height: 10.0),
+            StreamBuilder<String>(
+                stream: autenticacion.ci,
+                builder: (context, snapshot) {
+                  // ignore: missing_required_param
+                  return CorreoPass(
+                    hintText: 'CI',
+                    isIOS: Platform.isIOS,
+                    obscureText: false,
+                    texto: TextInputType.number,
+                    errorText: snapshot.error,
+                    onChanged: autenticacion.changeCi,
+                  );
+                }),
+            SizedBox(height: 10.0),
+            //
+            StreamBuilder<String>(
+                stream: autenticacion.email,
+                builder: (context, snapshot) {
+                  // ignore: missing_required_param
+                  return CorreoPass(
+                      hintText: 'Correo',
+                      isIOS: Platform.isIOS,
+                      texto: TextInputType.emailAddress,
+                      obscureText: false,
+                      onChanged: autenticacion.changeEmail,
+                      errorText: snapshot.error);
+                }),
+            //
+            SizedBox(height: 10.0),
+            //
+            StreamBuilder<String>(
+                stream: autenticacion.password,
+                builder: (context, snapshot) {
+                  // ignore: missing_required_param
+                  return CorreoPass(
+                      hintText: 'Contraseña',
+                      isIOS: Platform.isIOS,
+                      texto: TextInputType.text,
+                      obscureText: true,
+                      onChanged: autenticacion.changePassword,
+                      errorText: snapshot.error);
+                }),
+            //
+            SizedBox(height: 75.0),
+            //
+            StreamBuilder<bool>(
+                stream: autenticacion.isValid,
+                builder: (context, snapshot) {
+                  return Botones(
+                    textoBoton: 'Registrate',
+                    tipoBoton: (snapshot.data == true)
+                        ? TipoBoton.BotonLogin
+                        : TipoBoton.Deshabilitado,
+                    onPressed: autenticacion.signupEmail,
+                  );
+                }),
+          ],
+        ),
         SizedBox(height: 5.0),
         //
         Padding(
