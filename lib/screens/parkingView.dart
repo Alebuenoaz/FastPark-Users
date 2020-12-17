@@ -111,11 +111,13 @@ class _ParkingViewState extends State<ParkingView> {
   final databaseReference = Firestore.instance;
 
     void createRecord(value, userID, parkingID) async {
-    DocumentReference ref = await databaseReference.collection("puntuaciones")
-      .add({
+    String id = userID + parkingID;
+    await databaseReference.collection("puntuaciones")
+      .document(id)
+      .setData({
         'value': value,
         'userID': userID,
-        'parkingID': parkingID 
+        'parkingID': parkingID
       });
   }
 
