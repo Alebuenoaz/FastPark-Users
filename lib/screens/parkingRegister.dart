@@ -1,18 +1,22 @@
 import 'dart:io';
 
 import 'package:fast_park/models/parking.dart';
+import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/screens/location.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 class ParkingRegister extends StatefulWidget {
   final Parking parking;
+  final bool isNew;
 
-  ParkingRegister([this.parking]);
+  ParkingRegister([this.parking, this.isNew]);
 
   //ParkingRegister({Key key, this.title}) : super(key: key);
 
@@ -48,6 +52,32 @@ class _ParkingRegisterState extends State<ParkingRegister> {
   String lat = "";
   String lng = "";
 
+  @override
+  void initState() {
+    ownerIDController =
+        TextEditingController(text: widget.parking.ownerID.toString() ?? '');
+    ownIDController =
+        TextEditingController(text: widget.parking.userID.toString() ?? '');
+    nameController = TextEditingController(text: widget.parking.name ?? '');
+    directionController =
+        TextEditingController(text: widget.parking.direction ?? '');
+    priceController = TextEditingController(
+        text: widget.parking.pricePerHour.toString() ?? '');
+    descriptionController =
+        TextEditingController(text: widget.parking.description ?? '');
+    phoneNumberController = TextEditingController(
+        text: widget.parking.contactNumber.toString() ?? '');
+    availableDaysReverse(widget.parking.days);
+    var hours = [];
+    //hours = widget.parking.startTime.split(":");
+    //startTimePicked = TimeOfDay(hour: hours[0], minute: hours[1]);
+    //hours = widget.parking.endTime.split(":");
+    //endTimePicked = TimeOfDay(hour: hours[0], minute: hours[1]);
+    lat = widget.parking.lat;
+    lng = widget.parking.lng;
+    super.initState();
+  }
+
   void _create(
       String ownerID,
       String ownID,
@@ -57,34 +87,63 @@ class _ParkingRegisterState extends State<ParkingRegister> {
       String price,
       String description,
       BuildContext context) async {
+    var user = Provider.of<FirebaseUser>(context);
     try {
       String days = availableDays();
       String localStartTime = getTimeFormat(startTime);
       String localEndTime = getTimeFormat(endTime);
       if (checkFields(localStartTime, localEndTime)) {
-        await uploadPic();
-        await firestore.collection('RegistroParqueos').add({
-          'CIPropietario': int.parse(ownerID),
-          'CIPropio': int.parse(ownID),
-          'Nombre': name,
-          'Direccion': direction,
-          'Telefono': int.parse(phoneNumber),
-          'TarifaPorHora': double.parse(price),
-          'Descripcion': description,
-          'Dias': days,
-          'HoraInicio': localStartTime,
-          'HoraCierre': localEndTime,
-          'Imagen': url,
-          'lat': lat,
-          'lng': lng,
-          'IDManager': 'U2',
-        });
-        //Show completed action toast
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Parqueo registrado correctamente"),
-        ));
-        clean();
-        Navigator.of(context).pop();
+        if (widget.isNew) {
+          await uploadPic();
+          await firestore.collection('RegistroParqueos').add({
+            'CIPropietario': int.parse(ownerID),
+            'CIPropio': int.parse(ownID),
+            'Nombre': name,
+            'Direccion': direction,
+            'Telefono': int.parse(phoneNumber),
+            'TarifaPorHora': double.parse(price),
+            'Descripcion': description,
+            'Dias': days,
+            'HoraInicio': localStartTime,
+            'HoraCierre': localEndTime,
+            'Imagen': url,
+            'lat': lat,
+            'lng': lng,
+            'IDManager': user.uid
+          });
+          //Show completed action toast
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Parqueo registrado correctamente"),
+          ));
+          clean();
+          Navigator.of(context).pop();
+        } else {
+          await firestore
+              .collection('RegistroParqueos')
+              .document(widget.parking.documentID)
+              .setData({
+            'CIPropietario': int.parse(ownerID),
+            'CIPropio': int.parse(ownID),
+            'Nombre': name,
+            'Direccion': direction,
+            'Telefono': int.parse(phoneNumber),
+            'TarifaPorHora': double.parse(price),
+            'Descripcion': description,
+            'Dias': days,
+            'HoraInicio': localStartTime,
+            'HoraCierre': localEndTime,
+            'Imagen': url,
+            'lat': lat,
+            'lng': lng,
+            'IDManager': user.uid,
+          });
+          //Show completed action toast
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Parqueo registrado correctamente"),
+          ));
+          clean();
+          Navigator.of(context).pop();
+        }
       } else {
         _showMyDialog(context);
       }
@@ -166,6 +225,60 @@ class _ParkingRegisterState extends State<ParkingRegister> {
     if (_isSaturdaySelected) days += "6";
     if (_isSundaySelected) days += "7";
     return days;
+  }
+
+  availableDaysReverse(String days) {
+    String availableDays = days;
+    while (availableDays.length > 0) {
+      switch (availableDays.substring(0, 1)) {
+        case '1':
+          {
+            _isMondaySelected = true;
+          }
+          break;
+        case '2':
+          {
+            _isThursdaySelected = true;
+          }
+          break;
+        case '3':
+          {
+            _isWednesdaySelected = true;
+          }
+          break;
+        case '4':
+          {
+            _isTuesdaySelected = true;
+          }
+          break;
+        case '5':
+          {
+            _isFridaySelected = true;
+          }
+          break;
+        case '6':
+          {
+            _isSaturdaySelected = true;
+          }
+          break;
+        case '7':
+          {
+            _isSundaySelected = true;
+          }
+          break;
+      }
+      availableDays = availableDays.substring(1);
+    }
+
+    days.split("").forEach((char) {
+      if (_isMondaySelected) days += "1";
+      if (_isThursdaySelected) days += "2";
+      if (_isWednesdaySelected) days += "3";
+      if (_isTuesdaySelected) days += "4";
+      if (_isFridaySelected) days += "5";
+      if (_isSaturdaySelected) days += "6";
+      if (_isSundaySelected) days += "7";
+    });
   }
 
   String getTimeFormat(TimeOfDay time) {
@@ -514,9 +627,12 @@ class _ParkingRegisterState extends State<ParkingRegister> {
                 width: 210.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: _image == null
-                        ? AssetImage("assets/insert-picture.png")
-                        : FileImage(_image), // here add your image file path
+                    image: widget.parking.img != null
+                        ? NetworkImage(widget.parking.img)
+                        : _image == null
+                            ? AssetImage("assets/insert-picture.png")
+                            : FileImage(
+                                _image), // here add your image file path
                     fit: BoxFit.fill,
                   ),
                 ),

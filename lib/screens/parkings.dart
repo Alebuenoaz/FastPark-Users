@@ -45,6 +45,40 @@ class _ParkingState extends State<Parkings> {
           value: db.streamParking(),
           child: ParkingList(),
         ),*/
+        MaterialButton(
+          splashColor: Theme.of(context).secondaryHeaderColor,
+          color: Theme.of(context).primaryColor,
+          shape: StadiumBorder(),
+          child: Text(
+            'Añadir',
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ParkingRegister(
+                    Parking(
+                      documentID: '',
+                      idParkingManager: '',
+                      description: '',
+                      direction: '',
+                      days: '',
+                      startTime: '',
+                      endTime: '',
+                      img: '',
+                      pricePerHour: 0,
+                      contactNumber: 0,
+                      userID: 0,
+                      ownerID: 0,
+                      name: '',
+                      lat: '',
+                      lng: '',
+                    ),
+                    true)));
+          },
+        ),
       ],
     );
   }
@@ -71,7 +105,7 @@ class ParkingList extends StatelessWidget {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: parking.img == null
-                                ? AssetImage("assets/loading.png")
+                                ? CircularProgressIndicator()
                                 : NetworkImage(parking.img),
                             fit: BoxFit.fill,
                           ),
@@ -118,7 +152,8 @@ class ParkingList extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ParkingRegister(parking)));
+                              builder: (context) =>
+                                  ParkingRegister(parking, false)));
                         },
                       ),
                     ),

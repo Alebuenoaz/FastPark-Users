@@ -14,6 +14,8 @@ class Parking {
   final int userID;
   final int ownerID;
   final String name;
+  final String lat;
+  final String lng;
 
   Parking({
     this.idParkingManager,
@@ -29,6 +31,8 @@ class Parking {
     this.documentID,
     this.ownerID,
     this.name,
+    this.lat,
+    this.lng,
   });
 
   Map<String, dynamic> toMap() {
@@ -73,6 +77,8 @@ class Parking {
       userID: documentSnapshot['CIPropio'],
       ownerID: documentSnapshot['CIPropietario'],
       name: documentSnapshot['Nombre'],
+      lat: documentSnapshot['lat'],
+      lng: documentSnapshot['lng'],
     );
   }
 }
