@@ -111,15 +111,17 @@ class _ParkingViewState extends State<ParkingView> {
   final databaseReference = Firestore.instance;
 
     void createRecord(value, userID, parkingID) async {
-    DocumentReference ref = await databaseReference.collection("puntuaciones")
-      .add({
+    String id = userID + parkingID;
+    await databaseReference.collection("puntuaciones")
+      .document(id)
+      .setData({
         'value': value,
         'userID': userID,
-        'parkingID': parkingID 
+        'parkingID': parkingID
       });
   }
 
-  Future<String> createDialog(BuildContext context) {
+  Future<String> createDialog(BuildContext context, String user) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -150,7 +152,7 @@ class _ParkingViewState extends State<ParkingView> {
                       ),
                       onPressed: (){
                         print(rating.toString());
-                        createRecord(rating.toString(), 'U1', widget.idParking);
+                        createRecord(rating.toString(), user, widget.idParking);
                         Navigator.of(context).pop(rating.toString());
                       },
                     ),
@@ -289,7 +291,7 @@ class _ParkingViewState extends State<ParkingView> {
                                   ),
                                 ),
                                 onPressed: (){
-                                  createDialog(context);
+                                  createDialog(context, user.uid);
                                 },
                               ),
                       ),
