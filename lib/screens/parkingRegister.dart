@@ -54,28 +54,34 @@ class _ParkingRegisterState extends State<ParkingRegister> {
 
   @override
   void initState() {
-    ownerIDController =
-        TextEditingController(text: widget.parking.ownerID.toString() ?? '');
-    ownIDController =
-        TextEditingController(text: widget.parking.userID.toString() ?? '');
-    nameController = TextEditingController(text: widget.parking.name ?? '');
-    directionController =
-        TextEditingController(text: widget.parking.direction ?? '');
-    priceController = TextEditingController(
-        text: widget.parking.pricePerHour.toString() ?? '');
-    descriptionController =
-        TextEditingController(text: widget.parking.description ?? '');
-    phoneNumberController = TextEditingController(
-        text: widget.parking.contactNumber.toString() ?? '');
-    availableDaysReverse(widget.parking.days);
-    var hours = [];
-    //hours = widget.parking.startTime.split(":");
-    //startTimePicked = TimeOfDay(hour: hours[0], minute: hours[1]);
-    //hours = widget.parking.endTime.split(":");
-    //endTimePicked = TimeOfDay(hour: hours[0], minute: hours[1]);
-    lat = widget.parking.lat;
-    lng = widget.parking.lng;
-    super.initState();
+    if (!widget.isNew) {
+      ownerIDController =
+          TextEditingController(text: widget.parking.ownerID.toString() ?? '');
+      ownIDController =
+          TextEditingController(text: widget.parking.userID.toString() ?? '');
+      nameController = TextEditingController(text: widget.parking.name ?? '');
+      directionController =
+          TextEditingController(text: widget.parking.direction ?? '');
+      priceController = TextEditingController(
+          text: widget.parking.pricePerHour.toString() ?? '');
+      descriptionController =
+          TextEditingController(text: widget.parking.description ?? '');
+      phoneNumberController = TextEditingController(
+          text: widget.parking.contactNumber.toString() ?? '');
+      availableDaysReverse(widget.parking.days);
+      var hours = [];
+      hours = widget.parking.startTime.split(":");
+      startTime =
+          TimeOfDay(hour: int.parse(hours[0]), minute: int.parse(hours[1]));
+      hours = widget.parking.endTime.split(":");
+      endTime =
+          TimeOfDay(hour: int.parse(hours[0]), minute: int.parse(hours[1]));
+      lat = widget.parking.lat;
+      lng = widget.parking.lng;
+      _image = File("");
+      url = widget.parking.img;
+      super.initState();
+    }
   }
 
   void _create(
@@ -87,7 +93,7 @@ class _ParkingRegisterState extends State<ParkingRegister> {
       String price,
       String description,
       BuildContext context) async {
-    var user = Provider.of<FirebaseUser>(context);
+    var user = Provider.of<FirebaseUser>(context, listen: false);
     try {
       String days = availableDays();
       String localStartTime = getTimeFormat(startTime);
@@ -109,7 +115,8 @@ class _ParkingRegisterState extends State<ParkingRegister> {
             'Imagen': url,
             'lat': lat,
             'lng': lng,
-            'IDManager': user.uid
+            'IDManager': 'U2',
+            'userID': user.uid
           });
           //Show completed action toast
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -135,11 +142,12 @@ class _ParkingRegisterState extends State<ParkingRegister> {
             'Imagen': url,
             'lat': lat,
             'lng': lng,
-            'IDManager': user.uid,
+            'IDManager': 'U2',
+            'userID': user.uid
           });
           //Show completed action toast
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Parqueo registrado correctamente"),
+            content: Text("Parqueo actualizado correctamente"),
           ));
           clean();
           Navigator.of(context).pop();
@@ -198,6 +206,19 @@ class _ParkingRegisterState extends State<ParkingRegister> {
   }
 
   bool checkFields(String startHour, String endHour) {
+    print(ownerIDController.text);
+    print(ownIDController.text);
+    print(nameController.text);
+    print(directionController.text);
+    print(phoneNumberController.text);
+    print(priceController.text);
+    print(descriptionController.text);
+    print(lat);
+    print(lng);
+    print(availableDays());
+    print(verifyHours(startHour, endHour));
+    print(_image);
+
     if (ownerIDController.text != "" &&
         ownIDController.text != "" &&
         nameController.text != "" &&
@@ -269,16 +290,6 @@ class _ParkingRegisterState extends State<ParkingRegister> {
       }
       availableDays = availableDays.substring(1);
     }
-
-    days.split("").forEach((char) {
-      if (_isMondaySelected) days += "1";
-      if (_isThursdaySelected) days += "2";
-      if (_isWednesdaySelected) days += "3";
-      if (_isTuesdaySelected) days += "4";
-      if (_isFridaySelected) days += "5";
-      if (_isSaturdaySelected) days += "6";
-      if (_isSundaySelected) days += "7";
-    });
   }
 
   String getTimeFormat(TimeOfDay time) {
@@ -651,7 +662,8 @@ class _ParkingRegisterState extends State<ParkingRegister> {
                 minWidth: 380.0,
                 height: 50.0,
                 child: RaisedButton(
-                    child: Text('REGISTRAR'),
+                    child:
+                        widget.isNew ? Text('REGISTRAR') : Text('ACTUALIZAR'),
                     color: Colors.lightBlue,
                     onPressed: () {
                       _create(
