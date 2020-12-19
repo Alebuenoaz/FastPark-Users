@@ -12,7 +12,7 @@ class User {
       {this.userId, this.nombre, this.apellido, this.ci, this.email, this.img});
 
   Map<String, dynamic> toMap() {
-    return {
+    Map<String, dynamic> data = {
       //'userId': userId,
       'nombre': nombre,
       'apellido': apellido,
@@ -20,6 +20,8 @@ class User {
       'email': email,
       'img': img
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 
   factory User.fromFirestore(DocumentSnapshot documentSnapshot) {
