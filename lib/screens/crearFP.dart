@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/base.dart';
-import 'package:fast_park/design/colores.dart';
-import 'package:fast_park/design/textoCampos.dart';
 import 'package:fast_park/design/textosDes.dart';
 import 'package:fast_park/widget/alertas.dart';
-import 'package:fast_park/widget/botonesredes.dart';
 import 'package:fast_park/widget/buttons.dart';
 import 'package:fast_park/widget/correoPass.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,18 +70,18 @@ class _CrearCuentaState extends State<CrearCuenta> {
         Column(
           children: <Widget>[
             StreamBuilder<String>(
-            stream: autenticacion.nombre,
-            builder: (context, snapshot) {
-              // ignore: missing_required_param
-              return CorreoPass(
-                hintText: 'Nombre',
-                isIOS: Platform.isIOS,
-                obscureText: false,
-                texto: TextInputType.text,
-                errorText: snapshot.error,
-                onChanged: autenticacion.changeNombre,
-              );
-            }),
+                stream: autenticacion.nombre,
+                builder: (context, snapshot) {
+                  // ignore: missing_required_param
+                  return CorreoPass(
+                    hintText: 'Nombre',
+                    isIOS: Platform.isIOS,
+                    obscureText: false,
+                    texto: TextInputType.text,
+                    errorText: snapshot.error,
+                    onChanged: autenticacion.changeNombre,
+                  );
+                }),
             SizedBox(height: 10.0),
             StreamBuilder<String>(
                 stream: autenticacion.apellido,

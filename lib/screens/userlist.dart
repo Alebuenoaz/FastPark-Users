@@ -3,8 +3,6 @@ import 'package:fast_park/screens/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/usuarios.dart';
-
 //needed for client: change(), harcoded buttons
 //needed for owner: getall(), all inside expanded() in _UserlistState Widget build, all Members statelesswidget
 

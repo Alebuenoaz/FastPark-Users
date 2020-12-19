@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/userlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'mainPage.dart';
 
 class Register extends StatefulWidget {
   static const String id = "REGISTRATION";

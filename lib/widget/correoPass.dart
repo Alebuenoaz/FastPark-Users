@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fast_park/design/textoCampos.dart';
 import 'package:fast_park/design/textosDes.dart';
 import 'package:flutter/cupertino.dart';
