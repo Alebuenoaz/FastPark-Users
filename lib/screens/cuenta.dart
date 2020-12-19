@@ -25,15 +25,18 @@ class _CuentaState extends State<Cuenta> {
   @override
   Widget build(BuildContext context) {
     final autenticacion = Provider.of<Autenticacion>(context);
-
-    if (Platform.isIOS) {
-      return CupertinoPageScaffold(
-        child: cuerpo(context, autenticacion),
-      );
+    if (autenticacion != null) {
+      if (Platform.isIOS) {
+        return CupertinoPageScaffold(
+          child: cuerpo(context, autenticacion),
+        );
+      } else {
+        return Scaffold(
+          body: cuerpo(context, autenticacion),
+        );
+      }
     } else {
-      return Scaffold(
-        body: cuerpo(context, autenticacion),
-      );
+      return Center(child: CircularProgressIndicator());
     }
   }
 
@@ -41,87 +44,84 @@ class _CuentaState extends State<Cuenta> {
     //var isLoggedIn = Provider.of<bool>(context);
     var user = Provider.of<FirebaseUser>(context);
     var userData = Provider.of<User>(context);
-    bool loaded = user != null;
-    return (loaded)
+    return (userData != null)
         ? ListView(
             padding: EdgeInsets.all(0.0),
             children: <Widget>[
-              if (loaded) ...[
-                SizedBox(height: 100.0),
-                StreamBuilder<String>(
-                    stream: autenticacion.nombre,
-                    builder: (context, snapshot) {
-                      // ignore: missing_required_param
-                      return CorreoPass(
-                        hintText: 'Nombre',
-                        isIOS: Platform.isIOS,
-                        obscureText: false,
-                        texto: TextInputType.text,
-                        errorText: snapshot.error,
-                        onChanged: (text) {
-                          autenticacion.changeNombre;
-                          nombre = text;
-                        },
-                        //print(text);
-                        value: userData.nombre ?? '',
-                      );
-                    }),
-                SizedBox(height: 10.0),
-                StreamBuilder<String>(
-                    stream: autenticacion.apellido,
-                    builder: (context, snapshot) {
-                      // ignore: missing_required_param
-                      return CorreoPass(
-                        hintText: 'Apellido',
-                        isIOS: Platform.isIOS,
-                        obscureText: false,
-                        texto: TextInputType.text,
-                        errorText: snapshot.error,
-                        onChanged: (text) {
-                          autenticacion.changeApellido;
-                          apellido = text;
-                        },
-                        value: userData.apellido ?? '',
-                      );
-                    }),
-                SizedBox(height: 10.0),
-                StreamBuilder<String>(
-                    stream: autenticacion.ci,
-                    builder: (context, snapshot) {
-                      // ignore: missing_required_param
-                      return CorreoPass(
-                        hintText: 'CI',
-                        isIOS: Platform.isIOS,
-                        obscureText: false,
-                        texto: TextInputType.number,
-                        errorText: snapshot.error,
-                        onChanged: (text) {
-                          autenticacion.changeCi;
-                          ci = text;
-                        },
-                        value: userData.ci ?? '',
-                      );
-                    }),
-                SizedBox(height: 10.0),
-                //
-                StreamBuilder<String>(
-                    stream: autenticacion.email,
-                    builder: (context, snapshot) {
-                      // ignore: missing_required_param
-                      return CorreoPass(
-                        hintText: 'Correo',
-                        isIOS: Platform.isIOS,
-                        texto: TextInputType.emailAddress,
-                        obscureText: false,
-                        errorText: snapshot.error,
-                        onChanged: (text) {
-                          autenticacion.changeEmail;
-                          correo = text;
-                        },
-                        value: userData.email ?? '',
-                      );
-                    }),
-              ],
+              SizedBox(height: 100.0),
+              StreamBuilder<String>(
+                  stream: autenticacion.nombre,
+                  builder: (context, snapshot) {
+                    // ignore: missing_required_param
+                    return CorreoPass(
+                      hintText: 'Nombre',
+                      isIOS: Platform.isIOS,
+                      obscureText: false,
+                      texto: TextInputType.text,
+                      errorText: snapshot.error,
+                      onChanged: (text) {
+                        autenticacion.changeNombre;
+                        nombre = text;
+                      },
+                      //print(text);
+                      value: userData.nombre ?? '',
+                    );
+                  }),
+              SizedBox(height: 10.0),
+              StreamBuilder<String>(
+                  stream: autenticacion.apellido,
+                  builder: (context, snapshot) {
+                    // ignore: missing_required_param
+                    return CorreoPass(
+                      hintText: 'Apellido',
+                      isIOS: Platform.isIOS,
+                      obscureText: false,
+                      texto: TextInputType.text,
+                      errorText: snapshot.error,
+                      onChanged: (text) {
+                        autenticacion.changeApellido;
+                        apellido = text;
+                      },
+                      value: userData.apellido ?? '',
+                    );
+                  }),
+              SizedBox(height: 10.0),
+              StreamBuilder<String>(
+                  stream: autenticacion.ci,
+                  builder: (context, snapshot) {
+                    // ignore: missing_required_param
+                    return CorreoPass(
+                      hintText: 'CI',
+                      isIOS: Platform.isIOS,
+                      obscureText: false,
+                      texto: TextInputType.number,
+                      errorText: snapshot.error,
+                      onChanged: (text) {
+                        autenticacion.changeCi;
+                        ci = text;
+                      },
+                      value: userData.ci ?? '',
+                    );
+                  }),
+              SizedBox(height: 10.0),
+              //
+              StreamBuilder<String>(
+                  stream: autenticacion.email,
+                  builder: (context, snapshot) {
+                    // ignore: missing_required_param
+                    return CorreoPass(
+                      hintText: 'Correo',
+                      isIOS: Platform.isIOS,
+                      texto: TextInputType.emailAddress,
+                      obscureText: false,
+                      errorText: snapshot.error,
+                      onChanged: (text) {
+                        autenticacion.changeEmail;
+                        correo = text;
+                      },
+                      value: userData.email ?? '',
+                    );
+                  }),
               SizedBox(height: 50.0),
               StreamBuilder<User>(
                   stream: autenticacion.user,

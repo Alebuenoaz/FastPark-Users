@@ -38,13 +38,15 @@ class FirestoreServ {
   }
 
   Stream<List<Parking>> streamParking(FirebaseUser user) {
-    return _db
-        .collection('RegistroParqueos')
-        .where('userID', isEqualTo: user.uid)
-        .snapshots()
-        .map((snapshot) => snapshot.documents
-            .map((document) => Parking.fromFirestore(document))
-            .toList());
+    return (user != null)
+        ? _db
+            .collection('RegistroParqueos')
+            .where('userID', isEqualTo: user.uid)
+            .snapshots()
+            .map((snapshot) => snapshot.documents
+                .map((document) => Parking.fromFirestore(document))
+                .toList())
+        : null;
     //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
     //.snapshots();
     //return ref.snapshots().map((list) =>
@@ -62,5 +64,12 @@ class FirestoreServ {
         .map((snapshot) => snapshot.documents
             .map((document) => Review.fromFirestore(document))
             .toList());
+  }
+
+  Stream<List<User>> streamUsers() {
+    return _db.collection('usuarios').snapshots().map((snapshot) => snapshot
+        .documents
+        .map((document) => User.fromFirestore(document))
+        .toList());
   }
 }
