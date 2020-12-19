@@ -110,15 +110,12 @@ class _ParkingViewState extends State<ParkingView> {
   var rating = 0.0;
   final databaseReference = Firestore.instance;
 
-    void createRecord(value, userID, parkingID) async {
+  void createRecord(value, userID, parkingID) async {
     String id = userID + parkingID;
-    await databaseReference.collection("puntuaciones")
-      .document(id)
-      .setData({
-        'value': value,
-        'userID': userID,
-        'parkingID': parkingID
-      });
+    await databaseReference
+        .collection("puntuaciones")
+        .document(id)
+        .setData({'value': value, 'userID': userID, 'parkingID': parkingID});
   }
 
   Future<String> createDialog(BuildContext context, String user) {
@@ -133,29 +130,29 @@ class _ParkingViewState extends State<ParkingView> {
             starCount: 5,
             isReadOnly: false,
             onRated: (value) {
-                rating = value;
+              rating = value;
             },
           ),
           actions: <Widget>[
             Container(
               alignment: Alignment.center,
               child: MaterialButton(
-                      splashColor: Theme.of(context).secondaryHeaderColor,
-                      color: Theme.of(context).primaryColor,
-                      shape: StadiumBorder(),
-                      child: Text(
-                        'Enviar',
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: (){
-                        print(rating.toString());
-                        createRecord(rating.toString(), user, widget.idParking);
-                        Navigator.of(context).pop(rating.toString());
-                      },
-                    ),
+                splashColor: Theme.of(context).secondaryHeaderColor,
+                color: Theme.of(context).primaryColor,
+                shape: StadiumBorder(),
+                child: Text(
+                  'Enviar',
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  print(rating.toString());
+                  createRecord(rating.toString(), user, widget.idParking);
+                  Navigator.of(context).pop(rating.toString());
+                },
+              ),
             ),
           ],
         );
@@ -280,20 +277,20 @@ class _ParkingViewState extends State<ParkingView> {
                       Container(
                         alignment: Alignment.bottomCenter,
                         child: MaterialButton(
-                                splashColor: Theme.of(context).secondaryHeaderColor,
-                                color: Theme.of(context).primaryColor,
-                                shape: StadiumBorder(),
-                                child: Text(
-                                  'Calificar',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                onPressed: (){
-                                  createDialog(context, user.uid);
-                                },
-                              ),
+                          splashColor: Theme.of(context).secondaryHeaderColor,
+                          color: Theme.of(context).primaryColor,
+                          shape: StadiumBorder(),
+                          child: Text(
+                            'Calificar',
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            createDialog(context, user.uid);
+                          },
+                        ),
                       ),
                     ],
                   ),

@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:fast_park/providers/autenticacion.dart';
 import 'package:fast_park/design/barraDes.dart';
 import 'package:fast_park/screens/chatsOwner.dart';
-import 'package:fast_park/screens/cuentaOwner.dart';
-import 'package:fast_park/screens/parkings.dart';
-import 'package:fast_park/screens/parqueosOwner.dart';
+import 'package:fast_park/screens/parkingOwner.dart';
 import 'package:fast_park/screens/reservasOwner.dart';
 import 'package:fast_park/widget/barra.dart';
 import 'package:fast_park/widget/owner_scaf.dart';
@@ -84,8 +82,9 @@ class _OwnerState extends State<Owner> {
             body: TabBarView(
               children: <Widget>[
                 //ParqueosOwner(),
-                Parkings(),
+                ParkingOwner(),
                 ChatsOwner(),
+                //ReviewOwner(),
                 ReservasOwner(),
                 Cuenta(),
               ],
