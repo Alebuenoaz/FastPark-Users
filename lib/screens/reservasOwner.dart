@@ -2,87 +2,106 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import '../widget/buttons.dart';
 
-class ReservasOwner extends StatelessWidget {
+class ReservasOwner extends StatefulWidget {
+  Firestore _fireStore = Firestore.instance;
+  @override
+  _ReservasOwnerState createState() => _ReservasOwnerState();
+}
+
+class _ReservasOwnerState extends State<ReservasOwner> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: StreamBuilder(
-          stream: getReservas(context),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const Text("No tiene reservas");
-            return new ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    buildReservaCard(context, snapshot.data.documents[index]));
-          }),
-    );
-  }
-
-  Stream<QuerySnapshot> getReservas(BuildContext context) async* {
-    final idParqueo = await Provider.of(context).auth.getCurrentIDPARQUEO();
-    yield* Firestore.instance
-        .collection('IDParqueo')
-        .document(idParqueo)
-        .collection('Reservas')
-        .snapshots();
-  }
-
-  Widget buildReservaCard(
-      BuildContext context, DocumentSnapshot documentSnapshot) {
-    return new Container(
-      child: Card(
-          child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 50.0),
-              child: Row(
-                children: <Widget>[
-                  Text("ID Parqueo: " + documentSnapshot['IDParqueo'],
-                      style: new TextStyle(
-                        fontSize: 30.0,
-                      )),
-                ],
-              ),
-            ),
-
-            //Text("Id Reserva: " + reserva.idReserva),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: Row(
-                children: <Widget>[
-                  Text("Tamaño auto: " + documentSnapshot['TamañoAuto']),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-              child: Row(
-                children: <Widget>[
-                  Text("Hora final: " + documentSnapshot['horaFinal']),
-                  Spacer(),
-                  Text("Hora inicio: " + documentSnapshot['horaInicio)']),
-                ],
-              ),
-            ),
-          ],
-        ),
-      )),
-    );
+    return StreamBuilder(
+        stream: widget._fireStore.collection('Reservas').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Text("No tiene reservas disponibles");
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                String idParqueo = snapshot.data.documents[index]['IDParqueo'];
+                String horaInicio =
+                    snapshot.data.documents[index]['HoraInicio'];
+                String horaFinal = snapshot.data.documents[index]['HoraFinal'];
+                String tamAuto = snapshot.data.documents[index]['TamañoAuto'];
+                return ReservaCard(
+                  idParqueo: idParqueo,
+                  horaInicio: horaInicio,
+                  horaFinal: horaFinal,
+                  tamAuto: tamAuto,
+                );
+              },
+            );
+          }
+        });
   }
 }
 
-// class ReservaCard {
-//   final String idParqueo;
-//   final String horaFinal;
-//   final String horaInicio;
-//   final String tamAuto;
-//   final String idReserva;
+class ReservaCard extends StatefulWidget {
+  String idParqueo;
+  String horaInicio;
+  String horaFinal;
+  String tamAuto;
+  ReservaCard({this.idParqueo, this.horaInicio, this.horaFinal, this.tamAuto});
+  @override
+  _ReservaCardState createState() => _ReservaCardState();
+}
 
-//   ReservaCard(this.idParqueo, this.horaFinal, this.horaInicio, this.tamAuto,
-//       this.idReserva);
-// }
+class _ReservaCardState extends State<ReservaCard> {
+  bool isChecked = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
+                child: ListTile(
+                  title: Text(
+                    "ID Parqueo: " + widget.idParqueo,
+                    style: TextStyle(fontSize: 30.0),
+                  ),
+                ),
+              ),
+
+              //Text("Id Reserva: " + reserva.idReserva),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: Row(
+                  children: <Widget>[
+                    Text("Tamaño auto: " + widget.tamAuto),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                child: Row(
+                  children: <Widget>[
+                    Text("Hora final: " + widget.horaInicio),
+                    Spacer(),
+                    Text("Hora inicio: " + widget.horaFinal),
+                  ],
+                ),
+              ),
+              Botones(
+                textoBoton: 'Cancelar reserva',
+                tipoBoton: TipoBoton.BotonLogin,
+                onPressed: () async {
+                  //await cancelar(context);
+                  //Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
