@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/reserva.dart';
+import 'package:fast_park/services/firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import '../widget/buttons.dart';
 
 class ReservasOwner extends StatefulWidget {
@@ -11,9 +15,43 @@ class ReservasOwner extends StatefulWidget {
 }
 
 class _ReservasOwnerState extends State<ReservasOwner> {
+  final db = FirestoreServ();
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    var user = Provider.of<FirebaseUser>(context);
+
+    return StreamProvider<List<Reserva>>.value(
+        value: db.streamReservasOwner(user),
+        child: (user != null)
+            ? ReservasList()
+            : Center(child: CircularProgressIndicator()));
+  }
+}
+
+class ReservasList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var reservas = Provider.of<List<Reserva>>(context);
+
+    return Container(
+        height: 300,
+        child: (reservas != null)
+            ? ListView(
+                children: reservas.map((reserva) {
+                  //itemCount: reviews.length,
+                  //itemBuilder: (context, index) {
+                  return ReservaCard(
+                    idParqueo: reserva.idParqueo,
+                    horaInicio: reserva.horaInicio,
+                    horaFinal: reserva.horaFinal,
+                    tamAuto: reserva.tamAuto,
+                  );
+                }).toList(),
+              )
+            : Center(child: CircularProgressIndicator()));
+
+    /*StreamBuilder(
         stream: widget._fireStore.collection('Reservas').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -36,7 +74,7 @@ class _ReservasOwnerState extends State<ReservasOwner> {
               },
             );
           }
-        });
+        });*/
   }
 }
 

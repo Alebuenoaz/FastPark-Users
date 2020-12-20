@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/models/parking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,6 +44,22 @@ class FirestoreServ {
         .snapshots()
         .map((snapshot) => snapshot.documents
             .map((document) => Parking.fromFirestore(document))
+            .toList());
+    //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
+    //.snapshots();
+    //return ref.snapshots().map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+    //return ref.map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<Reserva>> streamReservasOwner(FirebaseUser user) {
+    return _db
+        .collection('Reservas')
+        .where('IDParqueo', isEqualTo: user.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Reserva.fromFirestore(document))
             .toList());
     //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
     //.snapshots();
