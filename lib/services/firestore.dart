@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/review.dart';
 import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/models/parking.dart';
@@ -71,5 +72,21 @@ class FirestoreServ {
         .documents
         .map((document) => User.fromFirestore(document))
         .toList());
+  }
+
+  Stream<List<Reserva>> streamReservasOwner(String parkingID) {
+    return _db
+        .collection('Reservas')
+        .where('IDParqueo', isEqualTo: parkingID)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Reserva.fromFirestore(document))
+            .toList());
+    //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
+    //.snapshots();
+    //return ref.snapshots().map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+    //return ref.map((list) =>
+    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
   }
 }
