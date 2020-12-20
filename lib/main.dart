@@ -86,7 +86,7 @@ class Plataformas extends StatelessWidget {
                 : Login(),
         onGenerateRoute: Rutas.materialRoutes,
         theme: CupertinoThemeData(
-          primaryColor: ColoresApp.naranja,
+          primaryColor: ColoresApp.black,
           scaffoldBackgroundColor: Colors.white,
           textTheme: CupertinoTextThemeData(
             tabLabelTextStyle: TextosDes.suggestion,
@@ -104,8 +104,9 @@ class Plataformas extends StatelessWidget {
                   : Login(),
           onGenerateRoute: Rutas.materialRoutes,
           theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              primarySwatch: Colors.orange));
+              primarySwatch: ColoresApp.black,
+              )
+      );
     }
   }
 

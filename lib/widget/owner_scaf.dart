@@ -17,7 +17,7 @@ abstract class OwnerScaff {
 
   static get _cupertinoBarra {
     return CupertinoTabBar(
-      backgroundColor: ColoresApp.naranjaClaro,
+      backgroundColor: ColoresApp.black,
       items: <BottomNavigationBarItem>[
         // ignore: deprecated_member_use
         BottomNavigationBarItem(

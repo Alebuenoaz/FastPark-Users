@@ -33,17 +33,17 @@ class _BotonesState extends State<Botones> {
     switch (widget.tipoBoton) {
       case TipoBoton.BotonLogin:
         fontStyle = TextosDes.buttonTextLight;
-        colorBoton = ColoresApp.naranja;
+        colorBoton = ColoresApp.black;
         break;
 
       case TipoBoton.Deshabilitado:
         fontStyle = TextosDes.buttonTextLight;
-        colorBoton = ColoresApp.naranjaClaro;
+        colorBoton = ColoresApp.black;
         break;
 
       default:
         fontStyle = TextosDes.buttonTextLight;
-        colorBoton = ColoresApp.naranjaClaro;
+        colorBoton = ColoresApp.black;
 
         break;
     }

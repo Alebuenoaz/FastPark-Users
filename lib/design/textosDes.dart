@@ -16,13 +16,13 @@ abstract class TextosDes {
   static TextStyle get buttonTextLight {
     return GoogleFonts.roboto(
         textStyle: TextStyle(
-            color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold));
+            color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold));
   }
 
   static TextStyle get link {
     return GoogleFonts.roboto(
         textStyle: TextStyle(
-            color: ColoresApp.amarillo,
+            color: ColoresApp.azulclaro,
             fontSize: 15.0,
             fontWeight: FontWeight.bold));
   }
@@ -34,6 +34,6 @@ abstract class TextosDes {
 
   static TextStyle get titulo {
     return GoogleFonts.poppins(
-        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold));
+        textStyle: TextStyle(color: ColoresApp.white, fontWeight: FontWeight.bold));
   }
 }

@@ -20,7 +20,7 @@ abstract class Barra {
         title,
         style: TextosDes.titulo,
       ),
-      backgroundColor: ColoresApp.naranjaClaro,
+      backgroundColor: ColoresApp.black,
       bottom: tabBar,
       floating: true,
       pinned: true,

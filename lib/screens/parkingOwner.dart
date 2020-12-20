@@ -86,7 +86,7 @@ class BodyParking extends StatelessWidget {
                     },
                   )
                 : FloatingActionButton(
-                    backgroundColor: ColoresApp.azulclaro,
+                    backgroundColor: ColoresApp.black,
                     shape: StadiumBorder(),
                     child: Icon(Icons.edit),
                     /*Text(
