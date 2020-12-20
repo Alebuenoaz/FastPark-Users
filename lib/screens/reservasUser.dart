@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/models/reserva.dart';
-import 'package:fast_park/models/parking.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,43 +8,32 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../widget/buttons.dart';
 
-class ReservasOwner extends StatefulWidget {
+class ReservasUser extends StatefulWidget {
   Firestore _fireStore = Firestore.instance;
   @override
-  _ReservasOwnerState createState() => _ReservasOwnerState();
+  _ReservasUserState createState() => _ReservasUserState();
 }
 
-class _ReservasOwnerState extends State<ReservasOwner> {
+class _ReservasUserState extends State<ReservasUser> {
   final db = FirestoreServ();
 
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
 
-    return StreamProvider<List<Parking>>.value(
-        value: db.streamParking(user),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('FastPark!'),
+      ),
+      body: StreamProvider<List<Reserva>>.value(
+        value: db.streamReservasUser(user),
         child: (user != null)
-            ? ParkingProvider()
-            : Center(child: CircularProgressIndicator()));
-  }
-}
-
-class ParkingProvider extends StatelessWidget {
-  final db = FirestoreServ();
-
-  @override
-  Widget build(BuildContext context) {
-    var parkings = Provider.of<List<Parking>>(context);
-    return (parkings != null && parkings.length > 0)
-        ? Container(
-            //child: SingleChildScrollView(
-            child: StreamProvider<List<Reserva>>.value(
-                value: db.streamReservasOwner(parkings[0].documentID),
-                child: ReservasList()))
-        : Center(
-            child: CircularProgressIndicator(),
-          );
-    //),;
+            ? ReservasList()
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
+    );
   }
 }
 
@@ -55,7 +43,7 @@ class ReservasList extends StatelessWidget {
     var reservas = Provider.of<List<Reserva>>(context);
 
     return Container(
-        height: 300,
+        height: MediaQuery.of(context).size.height,
         child: (reservas != null)
             ? (reservas.length > 0)
                 ? ListView(
@@ -72,31 +60,6 @@ class ReservasList extends StatelessWidget {
                   }).toList())
                 : Center(child: Text("No tiene reservas disponibles"))
             : Center(child: CircularProgressIndicator()));
-
-    /*StreamBuilder(
-        stream: widget._fireStore.collection('Reservas').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Text("No tiene reservas disponibles");
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (context, index) {
-                String idParqueo = snapshot.data.documents[index]['IDParqueo'];
-                String horaInicio =
-                    snapshot.data.documents[index]['HoraInicio'];
-                String horaFinal = snapshot.data.documents[index]['HoraFinal'];
-                String tamAuto = snapshot.data.documents[index]['TamañoAuto'];
-                return ReservaCard(
-                  idParqueo: idParqueo,
-                  horaInicio: horaInicio,
-                  horaFinal: horaFinal,
-                  tamAuto: tamAuto,
-                );
-              },
-            );
-          }
-        });*/
   }
 }
 
@@ -131,7 +94,7 @@ class _ReservaCardState extends State<ReservaCard> {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
                       child: ListTile(
                         title: Text(
-                          "ID Usuario: " + widget.idUsuario,
+                          "ID Parqueo: " + widget.idParqueo,
                           style: TextStyle(fontSize: 30.0),
                         ),
                       ),
@@ -157,14 +120,6 @@ class _ReservaCardState extends State<ReservaCard> {
                         ],
                       ),
                     ),
-                    Botones(
-                      textoBoton: 'Cancelar reserva',
-                      tipoBoton: TipoBoton.BotonLogin,
-                      onPressed: () async {
-                        //await cancelar(context);
-                        //Navigator.of(context).pop();
-                      },
-                    )
                   ],
                 ),
               ),

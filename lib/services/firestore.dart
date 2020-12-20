@@ -82,11 +82,15 @@ class FirestoreServ {
         .map((snapshot) => snapshot.documents
             .map((document) => Reserva.fromFirestore(document))
             .toList());
-    //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
-    //.snapshots();
-    //return ref.snapshots().map((list) =>
-    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
-    //return ref.map((list) =>
-    //    list.documents.map((doc) => Parking.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<Reserva>> streamReservasUser(FirebaseUser user) {
+    return _db
+        .collection('Reservas')
+        .where('IDUsuario', isEqualTo: user.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Reserva.fromFirestore(document))
+            .toList());
   }
 }

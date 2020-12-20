@@ -39,6 +39,7 @@ class _ReserveState extends State<Reserve> {
           'HoraFinal': localEndTime,
           'TamañoAuto': dropdownValue,
           'IDUsuario': userID,
+          'Estado': 'pendiente',
         });
         //Show completed action toast
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
