@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Reserve extends StatefulWidget {
   static const String id = "RESERVE";
@@ -22,7 +25,7 @@ class _ReserveState extends State<Reserve> {
   TimeOfDay endTimePicked;
   String dropdownValue = 'Mediano';
 
-  void makeReserve(BuildContext context) async {
+  void makeReserve(BuildContext context, String userID) async {
     try {
       String localStartTime = getTimeFormat(startTime);
       String localEndTime = getTimeFormat(endTime);
@@ -30,11 +33,12 @@ class _ReserveState extends State<Reserve> {
       String maxTime = widget.maxTime;
       if (verifyHours(localStartTime, localEndTime, minTime, maxTime) &&
           dropdownValue != "") {
-        await firestore.collection('Reservas').document('Reserva1').setData({
+        await firestore.collection('Reservas').add({
           'IDParqueo': widget.parkingID,
           'HoraInicio': localStartTime,
           'HoraFinal': localEndTime,
           'TamañoAuto': dropdownValue,
+          'IDUsuario': userID,
         });
         //Show completed action toast
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -136,6 +140,7 @@ class _ReserveState extends State<Reserve> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<FirebaseUser>(context);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -213,7 +218,7 @@ class _ReserveState extends State<Reserve> {
                 child: Text('RESERVAR'),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  makeReserve(context);
+                  makeReserve(context, user.uid);
                 }),
           ),
         ],
