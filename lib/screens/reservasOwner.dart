@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/parking.dart';
+import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,6 +122,7 @@ class ReservaCard extends StatefulWidget {
 }
 
 class _ReservaCardState extends State<ReservaCard> {
+  final db = FirestoreServ();
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
@@ -134,10 +136,28 @@ class _ReservaCardState extends State<ReservaCard> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
                       child: ListTile(
-                        title: Text(
+                        title: FutureBuilder(
+                          future: db.usuarioCreado(widget.idUsuario),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<User> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else {
+                              return Text(
+                                "Nombre del usuario: " +
+                                    snapshot.data.nombre +
+                                    " " +
+                                    snapshot.data.apellido,
+                                style: TextStyle(fontSize: 30.0),
+                              );
+                            }
+                          },
+                        ),
+                        /*Text(
                           "Placa del vehículo: " + widget.placa,
                           style: TextStyle(fontSize: 30.0),
-                        ),
+                        ),*/
                       ),
                     ),
 
@@ -147,6 +167,8 @@ class _ReservaCardState extends State<ReservaCard> {
                       child: Row(
                         children: <Widget>[
                           Text("Tamaño auto: " + widget.tamAuto),
+                          Spacer(),
+                          Text("Placa: " + widget.placa),
                         ],
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/parking.dart';
 import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -94,10 +95,37 @@ class _ReservaCardState extends State<ReservaCard> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
                       child: ListTile(
-                        title: Text(
+                        title: FutureBuilder(
+                          future: db.getParking(widget.idParqueo),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<Parking> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else {
+                              return Column(
+                                children: [
+                                  Text(
+                                    "Nombre del propietario: ",
+                                    style: TextStyle(fontSize: 30.0),
+                                  ),
+                                  Text(
+                                    snapshot.data.name,
+                                    style: TextStyle(fontSize: 30.0),
+                                  ),
+                                  Text(
+                                    'Dirección: ' + snapshot.data.direction,
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                ],
+                              );
+                            }
+                          },
+                        ),
+                        /*Text(
                           "ID Parqueo: " + widget.idParqueo,
                           style: TextStyle(fontSize: 30.0),
-                        ),
+                        ),*/
                       ),
                     ),
 

@@ -38,6 +38,14 @@ class FirestoreServ {
         .updateData(user.toMap());
   }
 
+  Future<Parking> getParking(String parkingID) {
+    return _db
+        .collection('RegistroParqueos')
+        .document(parkingID)
+        .get()
+        .then((snapshot) => Parking.fromFirestore(snapshot));
+  }
+
   Stream<List<Parking>> streamParking(FirebaseUser user) {
     return (user != null)
         ? _db
