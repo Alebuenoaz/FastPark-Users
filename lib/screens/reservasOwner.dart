@@ -131,7 +131,7 @@ class _ReservaCardState extends State<ReservaCard> {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
                       child: ListTile(
                         title: Text(
-                          "ID Usuario: " + widget.idUsuario,
+                          "Usuario: " + widget.idUsuario,
                           style: TextStyle(fontSize: 30.0),
                         ),
                       ),
