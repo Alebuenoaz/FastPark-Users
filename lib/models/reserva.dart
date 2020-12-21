@@ -7,6 +7,7 @@ class Reserva {
   final String horaFinal;
   final String horaInicio;
   final String tamAuto;
+  final String placa;
 
   Reserva({
     this.idReserva,
@@ -15,6 +16,7 @@ class Reserva {
     this.horaFinal,
     this.idParqueo,
     this.tamAuto,
+    this.placa,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Reserva {
       'HoraInicio': horaInicio,
       'HoraFinal': horaFinal,
       'TamañoAuto': tamAuto,
+      'Placa': placa,
     };
   }
 
@@ -36,6 +39,7 @@ class Reserva {
       horaInicio: documentSnapshot['HoraInicio'],
       horaFinal: documentSnapshot['HoraFinal'],
       tamAuto: documentSnapshot['TamañoAuto'],
+      placa: documentSnapshot['Placa'],
     );
   }
 }

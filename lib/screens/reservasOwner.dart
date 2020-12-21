@@ -68,6 +68,7 @@ class ReservasList extends StatelessWidget {
                       horaInicio: reserva.horaInicio,
                       horaFinal: reserva.horaFinal,
                       tamAuto: reserva.tamAuto,
+                      placa: reserva.placa,
                     );
                   }).toList())
                 : Center(child: Text("No tiene reservas disponibles"))
@@ -106,12 +107,15 @@ class ReservaCard extends StatefulWidget {
   String horaFinal;
   String tamAuto;
   String idUsuario;
-  ReservaCard(
-      {this.idUsuario,
-      this.idParqueo,
-      this.horaInicio,
-      this.horaFinal,
-      this.tamAuto});
+  String placa;
+  ReservaCard({
+    this.idUsuario,
+    this.idParqueo,
+    this.horaInicio,
+    this.horaFinal,
+    this.tamAuto,
+    this.placa,
+  });
   @override
   _ReservaCardState createState() => _ReservaCardState();
 }
@@ -131,7 +135,7 @@ class _ReservaCardState extends State<ReservaCard> {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
                       child: ListTile(
                         title: Text(
-                          "Usuario: " + widget.idUsuario,
+                          "Placa del vehículo: " + widget.placa,
                           style: TextStyle(fontSize: 30.0),
                         ),
                       ),

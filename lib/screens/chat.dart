@@ -46,7 +46,7 @@ class _ChatState extends State<Chat> {
           tag: 'logo',
           child: Container(
             height: 40.0,
-            child: Image.asset("assets/images/logo.png"),
+            child: Image.asset('imagenes/logo.png'),
           ),
         ),
         title: Text(widget.user1 + " and " + widget.user2),

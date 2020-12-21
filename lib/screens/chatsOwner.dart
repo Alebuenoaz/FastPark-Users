@@ -53,51 +53,53 @@ class ChatsOwner extends StatelessWidget {
         child: cuerpo(),
       );
     } else {
-      return FutureBuilder<dynamic>(
-        future: getAll(user.email), // function where you call your api
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          // AsyncSnapshot<Your object type>
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Text('Please wait its loading...'));
-          } else {
-            if (snapshot.hasError)
-              return Center(child: Text('Error: ${snapshot.error}'));
-            else {
-              return Scaffold(
-                body: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("Active owner chats"),
-                      Expanded(
-                        //Owner generated list start
-                        child: StreamBuilder<QuerySnapshot>(
-                          builder: (context, snapshot) {
-                            List<Widget> users = new List<Widget>();
-                            //builds user chats button list for owners
-                            users = usuarios
-                                .map((user) => Members(
-                                      user: user,
-                                      current: name,
-                                    ))
-                                .toList();
-                            return ListView(
-                              controller: scrollController,
-                              children: <Widget>[
-                                ...users,
-                              ],
-                            );
-                          },
+      return (user != null)
+          ? FutureBuilder<dynamic>(
+              future: getAll(user.email), // function where you call your api
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                // AsyncSnapshot<Your object type>
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: Text('Please wait its loading...'));
+                } else {
+                  if (snapshot.hasError)
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  else {
+                    return Scaffold(
+                      body: SafeArea(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("Active owner chats"),
+                            Expanded(
+                              //Owner generated list start
+                              child: StreamBuilder<QuerySnapshot>(
+                                builder: (context, snapshot) {
+                                  List<Widget> users = new List<Widget>();
+                                  //builds user chats button list for owners
+                                  users = usuarios
+                                      .map((user) => Members(
+                                            user: user,
+                                            current: name,
+                                          ))
+                                      .toList();
+                                  return ListView(
+                                    controller: scrollController,
+                                    children: <Widget>[
+                                      ...users,
+                                    ],
+                                  );
+                                },
+                              ),
+                            ), //Owner generated list end
+                          ],
                         ),
-                      ), //Owner generated list end
-                    ],
-                  ),
-                ),
-              );
-            }
-          }
-        },
-      );
+                      ),
+                    );
+                  }
+                }
+              },
+            )
+          : Center(child: CircularProgressIndicator());
     }
   }
 
