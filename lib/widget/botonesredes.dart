@@ -27,13 +27,13 @@ class BotonesRedes extends StatelessWidget {
         break;
       case TipoRedes.Google:
         iconoColor = Colors.white;
-        colorBoton = ColoresApp.azulGoogle;
+        colorBoton = ColoresApp.rojoGoogle;
         icon = FontAwesomeIcons.google;
         break;
 
       default:
         iconoColor = Colors.white;
-        colorBoton = ColoresApp.azulGoogle;
+        colorBoton = ColoresApp.rojoGoogle;
         icon = FontAwesomeIcons.google;
 
         break;

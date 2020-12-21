@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/screens/cuenta.dart';
+import 'package:fast_park/screens/reservasUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -84,6 +86,36 @@ class _MapsPageState extends State<SearchMap> {
     return Scaffold(
       appBar: AppBar(
         title: Text('FastPark!'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.local_car_wash,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReservasUser(),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Cuenta(),
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: (currentPosition != null)
           ? GoogleMap(

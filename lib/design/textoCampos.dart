@@ -21,7 +21,7 @@ abstract class TextosCampos {
   }
 
   static Color colorCursor() {
-    return ColoresApp.naranja;
+    return ColoresApp.black;
   }
 
   static Widget iconPrefix(IconData icon) {
@@ -30,7 +30,7 @@ abstract class TextosCampos {
       child: Icon(
         icon,
         size: 35.0,
-        color: ColoresApp.naranja,
+        color: ColoresApp.black,
       ),
     );
   }
@@ -38,7 +38,7 @@ abstract class TextosCampos {
   static BoxDecoration get cupertino {
     return BoxDecoration(
         border: Border.all(
-          color: ColoresApp.naranja,
+          color: ColoresApp.black,
           width: EstilosBase.borderWidth,
         ),
         borderRadius: BorderRadius.circular(EstilosBase.borderRadius));
@@ -77,15 +77,15 @@ abstract class TextosCampos {
       errorStyle: TextosDes.error,
       focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: ColoresApp.naranja, width: EstilosBase.borderWidth),
+              color: ColoresApp.black, width: EstilosBase.borderWidth),
           borderRadius: BorderRadius.circular(EstilosBase.borderRadius)),
       enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: ColoresApp.naranja, width: EstilosBase.borderWidth),
+              color: ColoresApp.black, width: EstilosBase.borderWidth),
           borderRadius: BorderRadius.circular(EstilosBase.borderRadius)),
       focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: ColoresApp.naranja, width: EstilosBase.borderWidth),
+              color: ColoresApp.black, width: EstilosBase.borderWidth),
           borderRadius: BorderRadius.circular(EstilosBase.borderRadius)),
       errorBorder: OutlineInputBorder(
           borderSide: BorderSide(

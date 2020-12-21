@@ -15,6 +15,7 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'models/parking.dart';
 import 'models/place.dart';
 import 'models/usuarios.dart';
 
@@ -85,7 +86,7 @@ class Plataformas extends StatelessWidget {
                 : Login(),
         onGenerateRoute: Rutas.materialRoutes,
         theme: CupertinoThemeData(
-          primaryColor: ColoresApp.naranja,
+          primaryColor: ColoresApp.black,
           scaffoldBackgroundColor: Colors.white,
           textTheme: CupertinoTextThemeData(
             tabLabelTextStyle: TextosDes.suggestion,
@@ -102,8 +103,10 @@ class Plataformas extends StatelessWidget {
                   ? HomeFP()
                   : Login(),
           onGenerateRoute: Rutas.materialRoutes,
-          theme: ThemeData(scaffoldBackgroundColor: Colors.white,
-          primarySwatch: Colors.orange));
+          theme: ThemeData(
+              primarySwatch: ColoresApp.black,
+              )
+      );
     }
   }
 

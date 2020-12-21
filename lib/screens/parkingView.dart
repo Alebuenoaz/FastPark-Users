@@ -113,9 +113,11 @@ class _ParkingViewState extends State<ParkingView> {
   final databaseReference = Firestore.instance;
 
   void createRecord(value, userID, parkingID) async {
-    DocumentReference ref = await databaseReference
+    String id = userID + parkingID;
+    await databaseReference
         .collection("puntuaciones")
-        .add({'value': value, 'userID': userID, 'parkingID': parkingID});
+        .document(id)
+        .setData({'value': value, 'userID': userID, 'parkingID': parkingID});
   }
 
   Future<String> createDialog(BuildContext context, String user) {
@@ -236,60 +238,72 @@ class _ParkingViewState extends State<ParkingView> {
                         child: new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            ButtonTheme(
-                              minWidth: 180.0,
-                              height: 50.0,
-                              buttonColor: Colors.green,
-                              child: RaisedButton(
-                                child: Text('Chat'),
-                                onPressed: () async {
-                                  await change(
-                                      /*widget.idUser*/ "U1",
-                                      idParkingManager);
-                                },
+                            MaterialButton(
+                              splashColor:
+                                  Theme.of(context).secondaryHeaderColor,
+                              color: Theme.of(context).primaryColor,
+                              shape: StadiumBorder(),
+                              child: Text(
+                                'Chat',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
                               ),
+                              onPressed: () async {
+                                await change(
+                                    /*widget.idUser*/ "U1",
+                                    idParkingManager);
+                              },
                             ),
                             Container(
                               width: 10,
                             ),
-                            ButtonTheme(
-                              minWidth: 180.0,
-                              height: 50.0,
-                              child: RaisedButton(
-                                child: Text('Reservar'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Reserve(
-                                        minTime: startTime,
-                                        maxTime: endTime,
-                                        parkingID: widget.idParking,
-                                      ),
-                                    ),
-                                  );
-                                },
+                            MaterialButton(
+                              splashColor:
+                                  Theme.of(context).secondaryHeaderColor,
+                              color: Theme.of(context).primaryColor,
+                              shape: StadiumBorder(),
+                              child: Text(
+                                'Reservar',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
                               ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Reserve(
+                                      minTime: startTime,
+                                      maxTime: endTime,
+                                      parkingID: widget.idParking,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            Container(
+                              width: 10,
+                            ),
+                            MaterialButton(
+                              splashColor:
+                                  Theme.of(context).secondaryHeaderColor,
+                              color: Theme.of(context).primaryColor,
+                              shape: StadiumBorder(),
+                              child: Text(
+                                'Calificar',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                createDialog(context, user.uid);
+                              },
                             ),
                           ],
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: MaterialButton(
-                          splashColor: Theme.of(context).secondaryHeaderColor,
-                          color: Theme.of(context).primaryColor,
-                          shape: StadiumBorder(),
-                          child: Text(
-                            'Calificar',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () {
-                            createDialog(context, user.uid);
-                          },
                         ),
                       ),
                     ],

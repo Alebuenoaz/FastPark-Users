@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/review.dart';
 import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/models/parking.dart';
@@ -38,13 +39,15 @@ class FirestoreServ {
   }
 
   Stream<List<Parking>> streamParking(FirebaseUser user) {
-    return _db
-        .collection('RegistroParqueos')
-        .where('userID', isEqualTo: user.uid)
-        .snapshots()
-        .map((snapshot) => snapshot.documents
-            .map((document) => Parking.fromFirestore(document))
-            .toList());
+    return (user != null)
+        ? _db
+            .collection('RegistroParqueos')
+            .where('userID', isEqualTo: user.uid)
+            .snapshots()
+            .map((snapshot) => snapshot.documents
+                .map((document) => Parking.fromFirestore(document))
+                .toList())
+        : null;
     //.where('userID', isEqualTo: 'NOVCBpNesvQBkacicyBE16bavxZ2')
     //.snapshots();
     //return ref.snapshots().map((list) =>
@@ -61,6 +64,33 @@ class FirestoreServ {
         .snapshots()
         .map((snapshot) => snapshot.documents
             .map((document) => Review.fromFirestore(document))
+            .toList());
+  }
+
+  Stream<List<User>> streamUsers() {
+    return _db.collection('usuarios').snapshots().map((snapshot) => snapshot
+        .documents
+        .map((document) => User.fromFirestore(document))
+        .toList());
+  }
+
+  Stream<List<Reserva>> streamReservasOwner(String parkingID) {
+    return _db
+        .collection('Reservas')
+        .where('IDParqueo', isEqualTo: parkingID)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Reserva.fromFirestore(document))
+            .toList());
+  }
+
+  Stream<List<Reserva>> streamReservasUser(FirebaseUser user) {
+    return _db
+        .collection('Reservas')
+        .where('IDUsuario', isEqualTo: user.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => Reserva.fromFirestore(document))
             .toList());
   }
 }
