@@ -1,4 +1,3 @@
-import 'package:fast_park/design/base.dart';
 import 'package:fast_park/design/botonesDes.dart';
 import 'package:fast_park/design/colores.dart';
 import 'package:flutter/material.dart';

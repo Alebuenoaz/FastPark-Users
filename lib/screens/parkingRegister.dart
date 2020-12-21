@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fast_park/models/parking.dart';
-import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/screens/location.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -634,16 +633,15 @@ class _ParkingRegisterState extends State<ParkingRegister> {
                 ),
               ),
               Container(
-                height: 210.0,
-                width: 210.0,
+                height: 250.0,
+                width: 250.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: widget.parking.img != null
+                    image: widget.parking.img != ""
                         ? NetworkImage(widget.parking.img)
                         : _image == null
-                            ? AssetImage("assets/insert-picture.png")
-                            : FileImage(
-                                _image), // here add your image file path
+                            ? AssetImage("assets/images/insert-photo.png")
+                            : FileImage(_image),
                     fit: BoxFit.fill,
                   ),
                 ),

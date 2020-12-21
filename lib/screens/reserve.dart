@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class Reserve extends StatefulWidget {
   static const String id = "RESERVE";
@@ -17,6 +18,17 @@ class Reserve extends StatefulWidget {
   _ReserveState createState() => _ReserveState();
 }
 
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text?.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
+}
+
 class _ReserveState extends State<Reserve> {
   Firestore firestore = Firestore.instance;
   TimeOfDay startTime = TimeOfDay(hour: 00, minute: 00);
@@ -24,6 +36,7 @@ class _ReserveState extends State<Reserve> {
   TimeOfDay startTimePicked;
   TimeOfDay endTimePicked;
   String dropdownValue = 'Mediano';
+  TextEditingController carPlateController = new TextEditingController();
 
   void makeReserve(BuildContext context, String userID) async {
     try {
@@ -32,13 +45,15 @@ class _ReserveState extends State<Reserve> {
       String minTime = widget.minTime;
       String maxTime = widget.maxTime;
       if (verifyHours(localStartTime, localEndTime, minTime, maxTime) &&
-          dropdownValue != "") {
+          dropdownValue != "" &&
+          carPlateController.text != "") {
         await firestore.collection('Reservas').add({
           'IDParqueo': widget.parkingID,
           'HoraInicio': localStartTime,
           'HoraFinal': localEndTime,
           'TamañoAuto': dropdownValue,
           'IDUsuario': userID,
+          'Placa': carPlateController.text,
           'Estado': 'pendiente',
         });
         //Show completed action toast
@@ -48,7 +63,7 @@ class _ReserveState extends State<Reserve> {
         Navigator.of(context).pop();
       } else {
         _showMyDialog(context,
-            "Las horas de inicio y fin estan mal definidas o fuera de los límites de atención del parqueo");
+            "Los datos de su reserva son incorrectos o estan incompletos");
       }
     } catch (e) {
       print(e);
@@ -208,6 +223,20 @@ class _ReserveState extends State<Reserve> {
                 child: Text(value),
               );
             }).toList(),
+          ),
+          Container(
+            height: 10.0,
+          ),
+          TextField(
+            controller: carPlateController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Placa del Automóvil',
+            ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(9),
+              UpperCaseTextFormatter()
+            ],
           ),
           Container(
             height: 10.0,

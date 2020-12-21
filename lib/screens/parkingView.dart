@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/reserve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -40,6 +41,7 @@ class _ParkingViewState extends State<ParkingView> {
   String destiny;
 
   Future<Parking> getProductById(String id) async {
+    log("ID: " + id);
     Parking parking = await firestore
         .collection('RegistroParqueos')
         .document(id)
