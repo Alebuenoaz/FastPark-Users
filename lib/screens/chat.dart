@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Chat extends StatefulWidget {
   static const String id = "CHAT";
@@ -41,15 +42,11 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Hero(
-          // could use logo if we wanted, if not it doesnt do anything
-          tag: 'logo',
-          child: Container(
-            height: 40.0,
-            child: Image.asset('imagenes/logo.png'),
-          ),
+        leading: Icon(
+          Icons.account_circle,
+          color: Colors.white,
         ),
-        title: Text(widget.user1 + " and " + widget.user2),
+        title: Text(widget.user1),
       ),
       body: SafeArea(
         child: Column(
@@ -87,6 +84,7 @@ class _ChatState extends State<Chat> {
                             text: doc.data['text'],
                             me: doc.data['Author'] == widget.current,
                             author: doc.data['Author'],
+                            date: doc.data['date'],
                           ))
                       .toList();
 
@@ -107,14 +105,14 @@ class _ChatState extends State<Chat> {
                     child: TextField(
                       onSubmitted: (value) => callback(),
                       decoration: InputDecoration(
-                        hintText: "Enter a Message...",
+                        hintText: "Escribe un mensaje...",
                         border: const OutlineInputBorder(),
                       ),
                       controller: messageController,
                     ),
                   ),
                   SendButton(
-                    text: "Send",
+                    text: "Enviar",
                     callback: callback,
                   )
                 ],
@@ -133,12 +131,27 @@ class SendButton extends StatelessWidget {
   const SendButton({Key key, this.text, this.callback}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.orange,
+    return MaterialButton(
+      splashColor: Theme.of(context).secondaryHeaderColor,
+      color: Theme.of(context).primaryColor,
+      shape: StadiumBorder(),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
+      ),
       onPressed: callback,
-      child: Text(text),
     );
   }
+}
+
+String convertDateFromString(String strDate) {
+  final DateTime parsedDate = DateTime.parse(strDate);
+  final DateFormat formatter = DateFormat('HH:mm');
+  final String formatted = formatter.format(parsedDate);
+  return formatted;
 }
 
 class Message extends StatelessWidget {
@@ -147,8 +160,15 @@ class Message extends StatelessWidget {
   final String text;
   final String author;
   final bool me;
+  final String date;
   const Message(
-      {Key key, this.user1, this.user2, this.text, this.me, this.author})
+      {Key key,
+      this.user1,
+      this.user2,
+      this.text,
+      this.me,
+      this.author,
+      this.date})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -158,11 +178,11 @@ class Message extends StatelessWidget {
             me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            author,
+            convertDateFromString(date),
           ),
           Material(
             // same but for colors
-            color: me ? Colors.teal : Colors.red,
+            color: me ? Colors.blue : Colors.blueGrey,
             borderRadius: BorderRadius.circular(10.0),
             elevation: 6.0,
             child: Container(

@@ -69,7 +69,6 @@ class ChatsOwner extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("Active owner chats"),
                             Expanded(
                               //Owner generated list start
                               child: StreamBuilder<QuerySnapshot>(
@@ -125,12 +124,18 @@ class Members extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          FlatButton(
-              color: Colors.orange,
-              child: Text(user),
-              onPressed: () async {
+          Card(
+            child: ListTile(
+              leading: Icon(
+                Icons.account_circle,
+                color: Colors.black,
+              ),
+              title: Text(user),
+              onTap: () async {
                 await change(current, user, context);
-              }),
+              },
+            ),
+          ),
         ],
       ),
     );

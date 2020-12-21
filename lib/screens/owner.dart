@@ -27,7 +27,7 @@ class Owner extends StatefulWidget {
       indicatorColor: BarraDes.indicator,
       tabs: <Widget>[
         Tab(icon: Icon(Icons.location_on_outlined)),
-        Tab(icon: Icon(Icons.chat_bubble_outline)),
+        Tab(icon: Icon(Icons.chat)),
         Tab(icon: Icon(Icons.drive_eta)),
         Tab(icon: Icon(Icons.person_outline)),
       ],
