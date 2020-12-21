@@ -49,11 +49,7 @@ class _ChatState extends State<Chat> {
             child: Image.asset("assets/images/logo.png"),
           ),
         ),
-        title: Text(widget.user1 +
-            " and " +
-            widget.user2 +
-            " chat current: " +
-            widget.current),
+        title: Text(widget.user1 + " and " + widget.user2),
       ),
       body: SafeArea(
         child: Column(

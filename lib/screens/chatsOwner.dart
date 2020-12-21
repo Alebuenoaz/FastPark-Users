@@ -14,7 +14,7 @@ class ChatsOwner extends StatelessWidget {
 
   getAll(String email) async {
     //getdata();
-
+    usuarios.clear();
     name = email;
     List<DocumentSnapshot> docs = new List<DocumentSnapshot>();
     QuerySnapshot variable = await Firestore.instance
