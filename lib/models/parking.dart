@@ -65,7 +65,7 @@ class Parking {
     Map<String, dynamic> firestore = documentSnapshot.data;
     return Parking(
       documentID: documentSnapshot.documentID,
-      idParkingManager: documentSnapshot['IDManager'],
+      idParkingManager: documentSnapshot['userID'], //cambiado por chat
       description: documentSnapshot['Descripcion'],
       direction: documentSnapshot['Direccion'],
       days: documentSnapshot['Dias'],

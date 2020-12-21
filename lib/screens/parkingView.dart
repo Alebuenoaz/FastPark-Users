@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/models/usuarios.dart';
 import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/reserve.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,6 +37,8 @@ class _ParkingViewState extends State<ParkingView> {
   String img;
   double pricePerHour;
   int contactNumber;
+
+  String destiny;
 
   Future<Parking> getProductById(String id) async {
     log("ID: " + id);
@@ -80,6 +83,15 @@ class _ParkingViewState extends State<ParkingView> {
     return workingDays;
   }
 
+  getDestinyMail() async {
+    DocumentSnapshot variable = await Firestore.instance
+        .collection('usuarios')
+        .document(idParkingManager)
+        .get();
+
+    destiny = variable.data['email'];
+  }
+
   Future<void> change(String user1, String user2) async {
     bool crear = true;
     QuerySnapshot variable = await Firestore.instance
@@ -90,6 +102,7 @@ class _ParkingViewState extends State<ParkingView> {
         crear = false;
       }
     }
+
     if (crear) {
       await firestore.collection('chats').add({
         'From': user1,
@@ -102,7 +115,7 @@ class _ParkingViewState extends State<ParkingView> {
         builder: (context) => Chat(
           user1: user1,
           user2: user2,
-          current: /*widget.idUser*/ "U1",
+          current: user1 /*"U1"*/,
         ),
       ),
     );
@@ -165,6 +178,7 @@ class _ParkingViewState extends State<ParkingView> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
+    var userfull = Provider.of<User>(context);
     return FutureBuilder<dynamic>(
       future:
           getProductById(widget.idParking), // function where you call your api
@@ -238,24 +252,38 @@ class _ParkingViewState extends State<ParkingView> {
                         child: new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            MaterialButton(
-                              splashColor:
-                                  Theme.of(context).secondaryHeaderColor,
-                              color: Theme.of(context).primaryColor,
-                              shape: StadiumBorder(),
-                              child: Text(
-                                'Chat',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () async {
-                                await change(
-                                    /*widget.idUser*/ "U1",
-                                    idParkingManager);
-                              },
-                            ),
+                            FutureBuilder<dynamic>(
+                                future: getDestinyMail(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else {
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    } else {
+                                      return MaterialButton(
+                                        splashColor: Theme.of(context)
+                                            .secondaryHeaderColor,
+                                        color: Theme.of(context).primaryColor,
+                                        shape: StadiumBorder(),
+                                        child: Text(
+                                          'Chat',
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          await change(userfull.email, destiny);
+                                        },
+                                      );
+                                    }
+                                  }
+                                }),
                             Container(
                               width: 10,
                             ),
