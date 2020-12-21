@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_park/design/base.dart';
+import 'package:fast_park/design/colores.dart';
+import 'package:fast_park/design/textoCampos.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -206,10 +209,10 @@ class _ReserveState extends State<Reserve> {
             icon: Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
-            style: TextStyle(color: Colors.blueAccent),
+            style: TextStyle(color: Colors.black),
             underline: Container(
               height: 2,
-              color: Colors.blueAccent,
+              color: Colors.black,
             ),
             onChanged: (String newValue) {
               setState(() {
@@ -227,16 +230,50 @@ class _ReserveState extends State<Reserve> {
           Container(
             height: 10.0,
           ),
-          TextField(
-            controller: carPlateController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Placa del Automóvil',
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: TextosCampos.textBoxHorizonatal(),
+              vertical: TextosCampos.textBoxVertical(),
             ),
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(9),
-              UpperCaseTextFormatter()
-            ],
+            child: TextField(
+              controller: carPlateController,
+              keyboardType: TextInputType.text,
+              cursorColor: TextosCampos.colorCursor(),
+              style: TextosCampos.text(),
+              textAlign: TextosCampos.textAlign(),
+              decoration: InputDecoration(
+                hintText: 'Placa del Automóvil',
+                border: OutlineInputBorder(),
+                //labelText: 'Placa del Automóvil',
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: ColoresApp.black,
+                        width: EstilosBase.borderWidth),
+                    borderRadius:
+                        BorderRadius.circular(EstilosBase.borderRadius)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: ColoresApp.black,
+                        width: EstilosBase.borderWidth),
+                    borderRadius:
+                        BorderRadius.circular(EstilosBase.borderRadius)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: ColoresApp.black,
+                        width: EstilosBase.borderWidth),
+                    borderRadius:
+                        BorderRadius.circular(EstilosBase.borderRadius)),
+                errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: ColoresApp.rojo, width: EstilosBase.borderWidth),
+                    borderRadius:
+                        BorderRadius.circular(EstilosBase.borderRadius)),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(9),
+                UpperCaseTextFormatter()
+              ],
+            ),
           ),
           Container(
             height: 10.0,
@@ -244,12 +281,21 @@ class _ReserveState extends State<Reserve> {
           ButtonTheme(
             minWidth: 380.0,
             height: 50.0,
-            child: RaisedButton(
-                child: Text('RESERVAR'),
-                color: Colors.lightBlue,
-                onPressed: () async {
-                  makeReserve(context, user.uid);
-                }),
+            child: MaterialButton(
+              splashColor: Theme.of(context).secondaryHeaderColor,
+              color: Theme.of(context).primaryColor,
+              shape: StadiumBorder(),
+              child: Text(
+                'RESERVAR',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () async {
+                makeReserve(context, user.uid);
+              },
+            ),
           ),
         ],
       ),
