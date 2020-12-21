@@ -161,14 +161,42 @@ class _ReservaCardState extends State<ReservaCard> {
                         ],
                       ),
                     ),
-                    Botones(
-                      textoBoton: 'Cancelar reserva',
-                      tipoBoton: TipoBoton.BotonLogin,
-                      onPressed: () async {
-                        //await cancelar(context);
-                        //Navigator.of(context).pop();
-                      },
-                    )
+                    new Container(
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          MaterialButton(
+                            splashColor: Theme.of(context).secondaryHeaderColor,
+                            color: Theme.of(context).primaryColor,
+                            shape: StadiumBorder(),
+                            child: Text(
+                              'Aceptar Reserva',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {},
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          MaterialButton(
+                            splashColor: Theme.of(context).secondaryHeaderColor,
+                            color: Theme.of(context).primaryColor,
+                            shape: StadiumBorder(),
+                            child: Text(
+                              'Cancelar Reserva',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -81,6 +81,7 @@ class ReservaCard extends StatefulWidget {
 
 class _ReservaCardState extends State<ReservaCard> {
   bool isChecked = false;
+  final db = FirestoreServ();
   @override
   Widget build(BuildContext context) {
     return (widget.idParqueo != null)
@@ -119,6 +120,19 @@ class _ReservaCardState extends State<ReservaCard> {
                           Text("Hora inicio: " + widget.horaFinal),
                         ],
                       ),
+                    ),
+                    MaterialButton(
+                      splashColor: Theme.of(context).secondaryHeaderColor,
+                      color: Theme.of(context).primaryColor,
+                      shape: StadiumBorder(),
+                      child: Text(
+                        'Cancelar Reserva',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {},
                     ),
                   ],
                 ),
