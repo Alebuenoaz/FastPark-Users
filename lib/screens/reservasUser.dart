@@ -52,11 +52,14 @@ class ReservasList extends StatelessWidget {
                     //itemCount: reviews.length,
                     //itemBuilder: (context, index) {
                     return ReservaCard(
+                      idReserva: reserva.idReserva,
                       idUsuario: reserva.idUsuario,
                       idParqueo: reserva.idParqueo,
                       horaInicio: reserva.horaInicio,
                       horaFinal: reserva.horaFinal,
                       tamAuto: reserva.tamAuto,
+                      placa: reserva.placa,
+                      estado: reserva.estado,
                     );
                   }).toList())
                 : Center(child: Text("No tiene reservas disponibles"))
@@ -65,17 +68,24 @@ class ReservasList extends StatelessWidget {
 }
 
 class ReservaCard extends StatefulWidget {
+  String idReserva;
   String idParqueo;
   String horaInicio;
   String horaFinal;
   String tamAuto;
   String idUsuario;
-  ReservaCard(
-      {this.idUsuario,
-      this.idParqueo,
-      this.horaInicio,
-      this.horaFinal,
-      this.tamAuto});
+  String placa;
+  String estado;
+  ReservaCard({
+    this.idReserva,
+    this.idUsuario,
+    this.idParqueo,
+    this.horaInicio,
+    this.horaFinal,
+    this.tamAuto,
+    this.placa,
+    this.estado,
+  });
   @override
   _ReservaCardState createState() => _ReservaCardState();
 }
@@ -149,6 +159,16 @@ class _ReservaCardState extends State<ReservaCard> {
                         ],
                       ),
                     ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                      child: Row(
+                        children: <Widget>[
+                          Center(child: Text("Estado: " + widget.estado)),
+                        ],
+                      ),
+                    ),
+
                     MaterialButton(
                       splashColor: Theme.of(context).secondaryHeaderColor,
                       color: Theme.of(context).primaryColor,
@@ -160,7 +180,18 @@ class _ReservaCardState extends State<ReservaCard> {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await db.updateReserva(Reserva(
+                          idReserva: widget.idReserva,
+                          idParqueo: widget.idParqueo,
+                          idUsuario: widget.idUsuario,
+                          horaInicio: widget.horaInicio,
+                          horaFinal: widget.horaFinal,
+                          tamAuto: widget.tamAuto,
+                          placa: widget.placa,
+                          estado: 'cancelado',
+                        ));
+                      },
                     ),
                   ],
                 ),

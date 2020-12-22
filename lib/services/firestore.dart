@@ -101,4 +101,11 @@ class FirestoreServ {
             .map((document) => Reserva.fromFirestore(document))
             .toList());
   }
+
+  Future<void> updateReserva(Reserva reserva) {
+    return _db
+        .collection('Reservas')
+        .document(reserva.idReserva)
+        .updateData(reserva.toMap());
+  }
 }
