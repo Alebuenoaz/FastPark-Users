@@ -48,7 +48,7 @@ class BodyParking extends StatelessWidget {
                     ),
                   )
                 : Center(
-                    child: Text('Usted no tiene asignado nigun Parqueo'),
+                    child: Text('Usted no tiene asignado ningún Parqueo'),
                   ),
             floatingActionButton: (parkings.length == 0)
                 ? FloatingActionButton(

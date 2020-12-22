@@ -1,4 +1,4 @@
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:fast_park/widget/correoPass.dart';
 import 'package:fast_park/widget/buttons.dart';

@@ -114,7 +114,6 @@ class _ParkingRegisterState extends State<ParkingRegister> {
             'Imagen': url,
             'lat': lat,
             'lng': lng,
-            'IDManager': 'U2',
             'userID': user.uid
           });
           //Show completed action toast
@@ -141,7 +140,6 @@ class _ParkingRegisterState extends State<ParkingRegister> {
             'Imagen': url,
             'lat': lat,
             'lng': lng,
-            'IDManager': 'U2',
             'userID': user.uid
           });
           //Show completed action toast

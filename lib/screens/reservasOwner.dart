@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/parking.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +37,14 @@ class ParkingProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var parkings = Provider.of<List<Parking>>(context);
-    return (parkings != null && parkings.length > 0)
-        ? Container(
-            //child: SingleChildScrollView(
-            child: StreamProvider<List<Reserva>>.value(
-                value: db.streamReservasOwner(parkings[0].documentID),
-                child: ReservasList()))
+    return (parkings != null)
+        ? (parkings.length > 0)
+            ? Container(
+                //child: SingleChildScrollView(
+                child: StreamProvider<List<Reserva>>.value(
+                    value: db.streamReservasOwner(parkings[0].documentID),
+                    child: ReservasList()))
+            : Center(child: Text("No tiene reservas disponibles"))
         : Center(
             child: CircularProgressIndicator(),
           );
@@ -224,6 +226,6 @@ class _ReservaCardState extends State<ReservaCard> {
               ),
             ),
           )
-        : Center(child: CircularProgressIndicator());
+        : Center(child: Text("No tiene reservas disponibles"));
   }
 }

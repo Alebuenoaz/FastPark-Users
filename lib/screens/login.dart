@@ -47,7 +47,7 @@ class _LoginState extends State<Login> {
             keyboardType: TextInputType.emailAddress,
             onChanged: (value) => email = value,
             decoration: InputDecoration(
-              hintText: "Enter Your Email...",
+              hintText: "Ingrese su correo ...",
               border: const OutlineInputBorder(),
             ),
           ),
@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
             obscureText: true,
             onChanged: (value) => password = value,
             decoration: InputDecoration(
-              hintText: "Enter Your Password...",
+              hintText: "Ingrese su contraseña ...",
               border: const OutlineInputBorder(),
             ),
           ),

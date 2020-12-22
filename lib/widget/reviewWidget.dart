@@ -1,6 +1,6 @@
 import 'package:fast_park/models/parking.dart';
 import 'package:fast_park/models/review.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

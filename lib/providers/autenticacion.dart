@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:fast_park/services/firestore.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';

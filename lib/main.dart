@@ -17,7 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'models/parking.dart';
 import 'models/place.dart';
-import 'models/usuarios.dart';
+import 'models/user.dart';
 
 final autenticacion = Autenticacion();
 void main() {
@@ -104,9 +104,8 @@ class Plataformas extends StatelessWidget {
                   : Login(),
           onGenerateRoute: Rutas.materialRoutes,
           theme: ThemeData(
-              primarySwatch: ColoresApp.black,
-              )
-      );
+            primarySwatch: ColoresApp.black,
+          ));
     }
   }
 

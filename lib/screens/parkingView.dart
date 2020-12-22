@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/screens/chat.dart';
 import 'package:fast_park/screens/reserve.dart';
 import 'package:firebase_auth/firebase_auth.dart';

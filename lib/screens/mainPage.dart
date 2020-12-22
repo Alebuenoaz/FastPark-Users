@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/usuarios.dart';
+import '../models/user.dart';
 
 class MainPage extends StatefulWidget {
   static const String id = "MAIN";
@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         // AsyncSnapshot<Your object type>
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: Text('Please wait its loading...'));
+          return Center(child: Text('Espere un momento, cargando ...'));
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -65,13 +65,13 @@ class _MainPageState extends State<MainPage> {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "User name: " + snapshot.data.name,
+                      hintText: "Nombre de usuario: " + snapshot.data.name,
                       border: const OutlineInputBorder(),
                     ),
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "User email: " + snapshot.data.email,
+                      hintText: "Correo : " + snapshot.data.email,
                       border: const OutlineInputBorder(),
                     ),
                   )

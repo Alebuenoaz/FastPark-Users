@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/screens/chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +59,7 @@ class ChatsOwner extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 // AsyncSnapshot<Your object type>
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: Text('Please wait its loading...'));
+                  return Center(child: Text('Cargando mensajes ...'));
                 } else {
                   if (snapshot.hasError)
                     return Center(child: Text('Error: ${snapshot.error}'));
@@ -74,19 +74,25 @@ class ChatsOwner extends StatelessWidget {
                               child: StreamBuilder<QuerySnapshot>(
                                 builder: (context, snapshot) {
                                   List<Widget> users = new List<Widget>();
-                                  //builds user chats button list for owners
-                                  users = usuarios
-                                      .map((user) => Members(
-                                            user: user,
-                                            current: name,
-                                          ))
-                                      .toList();
-                                  return ListView(
-                                    controller: scrollController,
-                                    children: <Widget>[
-                                      ...users,
-                                    ],
-                                  );
+                                  if (users.length > 0) {
+                                    //builds user chats button list for owners
+                                    users = usuarios
+                                        .map((user) => Members(
+                                              user: user,
+                                              current: name,
+                                            ))
+                                        .toList();
+                                    return ListView(
+                                      controller: scrollController,
+                                      children: <Widget>[
+                                        ...users,
+                                      ],
+                                    );
+                                  } else {
+                                    return Center(
+                                        child: Text(
+                                            "No tiene mensajes disponibles"));
+                                  }
                                 },
                               ),
                             ), //Owner generated list end

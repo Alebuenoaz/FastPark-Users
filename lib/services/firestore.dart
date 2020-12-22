@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_park/models/reserva.dart';
 import 'package:fast_park/models/review.dart';
-import 'package:fast_park/models/usuarios.dart';
+import 'package:fast_park/models/user.dart';
 import 'package:fast_park/models/parking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
