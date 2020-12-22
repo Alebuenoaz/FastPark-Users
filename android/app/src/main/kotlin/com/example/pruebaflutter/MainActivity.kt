@@ -1,4 +1,4 @@
-package com.example.pruebaflutter
+package com.example.fast_Park
 
 import io.flutter.embedding.android.FlutterActivity
 
